@@ -13,17 +13,17 @@
 		331D5B8D1D41E0F700A51372 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 331D5B8B1D41E0F700A51372 /* Main.storyboard */; };
 		331D5B991D41E0F800A51372 /* ModelYTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 331D5B981D41E0F800A51372 /* ModelYTests.m */; };
 		331D5BA71D41E38600A51372 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 331D5BA31D41E38600A51372 /* main.cpp */; };
-		331D5BAC1D41E3C800A51372 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 331D5BA81D41E3C800A51372 /* image_DXT.c */; };
-		331D5BAD1D41E3C800A51372 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 331D5BA91D41E3C800A51372 /* image_helper.c */; };
-		331D5BAE1D41E3C800A51372 /* SOIL.c in Sources */ = {isa = PBXBuildFile; fileRef = 331D5BAA1D41E3C800A51372 /* SOIL.c */; };
-		331D5BAF1D41E3C800A51372 /* stb_image_aug.c in Sources */ = {isa = PBXBuildFile; fileRef = 331D5BAB1D41E3C800A51372 /* stb_image_aug.c */; };
 		331D5BB61D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB01D41E3DF00A51372 /* libassimp.3.2.0.dylib */; };
 		331D5BB71D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB11D41E3DF00A51372 /* libassimp.3.2.0.dylib */; };
 		331D5BB81D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB21D41E3DF00A51372 /* libassimp.3.2.0.dylib */; };
 		331D5BB91D41E3DF00A51372 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB31D41E3DF00A51372 /* libGLEW.a */; };
 		331D5BBA1D41E3DF00A51372 /* libGLEWmx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB41D41E3DF00A51372 /* libGLEWmx.a */; };
 		331D5BBB1D41E3DF00A51372 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB51D41E3DF00A51372 /* libglfw3.a */; };
-		331D5BBD1D41E3EB00A51372 /* libSOIL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BBC1D41E3EB00A51372 /* libSOIL.a */; };
+		33C71D721D508F5B00CA1056 /* libSOIL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33C71D711D508F5B00CA1056 /* libSOIL.a */; };
+		33C71D771D508F8700CA1056 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 33C71D731D508F8700CA1056 /* image_DXT.c */; };
+		33C71D781D508F8700CA1056 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 33C71D741D508F8700CA1056 /* image_helper.c */; };
+		33C71D791D508F8700CA1056 /* SOIL.c in Sources */ = {isa = PBXBuildFile; fileRef = 33C71D751D508F8700CA1056 /* SOIL.c */; };
+		33C71D7A1D508F8700CA1056 /* stb_image_aug.c in Sources */ = {isa = PBXBuildFile; fileRef = 33C71D761D508F8700CA1056 /* stb_image_aug.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,17 +53,17 @@
 		331D5BA41D41E38600A51372 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		331D5BA51D41E38600A51372 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		331D5BA61D41E38600A51372 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
-		331D5BA81D41E3C800A51372 /* image_DXT.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = image_DXT.c; path = ../../libSOIL/SOIL/src/image_DXT.c; sourceTree = "<group>"; };
-		331D5BA91D41E3C800A51372 /* image_helper.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = image_helper.c; path = ../../libSOIL/SOIL/src/image_helper.c; sourceTree = "<group>"; };
-		331D5BAA1D41E3C800A51372 /* SOIL.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = SOIL.c; path = ../../libSOIL/SOIL/src/SOIL.c; sourceTree = "<group>"; };
-		331D5BAB1D41E3C800A51372 /* stb_image_aug.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = stb_image_aug.c; path = ../../libSOIL/SOIL/src/stb_image_aug.c; sourceTree = "<group>"; };
 		331D5BB01D41E3DF00A51372 /* libassimp.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.3.2.0.dylib; path = ../../../../../usr/local/Cellar/assimp/3.2/lib/libassimp.3.2.0.dylib; sourceTree = "<group>"; };
 		331D5BB11D41E3DF00A51372 /* libassimp.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.3.2.0.dylib; path = ../../../../../usr/local/Cellar/assimp/3.2/lib/libassimp.3.2.0.dylib; sourceTree = "<group>"; };
 		331D5BB21D41E3DF00A51372 /* libassimp.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.3.2.0.dylib; path = ../../../../../usr/local/Cellar/assimp/3.2/lib/libassimp.3.2.0.dylib; sourceTree = "<group>"; };
 		331D5BB31D41E3DF00A51372 /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = ../../../../../usr/local/Cellar/glew/1.13.0/lib/libGLEW.a; sourceTree = "<group>"; };
 		331D5BB41D41E3DF00A51372 /* libGLEWmx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEWmx.a; path = ../../../../../usr/local/Cellar/glew/1.13.0/lib/libGLEWmx.a; sourceTree = "<group>"; };
 		331D5BB51D41E3DF00A51372 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfw3.a; path = ../../../../../usr/local/lib/libglfw3.a; sourceTree = "<group>"; };
-		331D5BBC1D41E3EB00A51372 /* libSOIL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSOIL.a; path = ../../libSOIL/SOIL/lib/libSOIL.a; sourceTree = "<group>"; };
+		33C71D711D508F5B00CA1056 /* libSOIL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSOIL.a; path = ../../../Documents/libSOIL/SOIL/lib/libSOIL.a; sourceTree = "<group>"; };
+		33C71D731D508F8700CA1056 /* image_DXT.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = image_DXT.c; path = ../../../Documents/libSOIL/SOIL/src/image_DXT.c; sourceTree = "<group>"; };
+		33C71D741D508F8700CA1056 /* image_helper.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = image_helper.c; path = ../../../Documents/libSOIL/SOIL/src/image_helper.c; sourceTree = "<group>"; };
+		33C71D751D508F8700CA1056 /* SOIL.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = SOIL.c; path = ../../../Documents/libSOIL/SOIL/src/SOIL.c; sourceTree = "<group>"; };
+		33C71D761D508F8700CA1056 /* stb_image_aug.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = stb_image_aug.c; path = ../../../Documents/libSOIL/SOIL/src/stb_image_aug.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				331D5BBD1D41E3EB00A51372 /* libSOIL.a in Frameworks */,
+				33C71D721D508F5B00CA1056 /* libSOIL.a in Frameworks */,
 				331D5BB61D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */,
 				331D5BB71D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */,
 				331D5BB81D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */,
@@ -94,17 +94,17 @@
 		331D5B731D41E0F700A51372 = {
 			isa = PBXGroup;
 			children = (
-				331D5BBC1D41E3EB00A51372 /* libSOIL.a */,
+				33C71D731D508F8700CA1056 /* image_DXT.c */,
+				33C71D741D508F8700CA1056 /* image_helper.c */,
+				33C71D751D508F8700CA1056 /* SOIL.c */,
+				33C71D761D508F8700CA1056 /* stb_image_aug.c */,
+				33C71D711D508F5B00CA1056 /* libSOIL.a */,
 				331D5BB01D41E3DF00A51372 /* libassimp.3.2.0.dylib */,
 				331D5BB11D41E3DF00A51372 /* libassimp.3.2.0.dylib */,
 				331D5BB21D41E3DF00A51372 /* libassimp.3.2.0.dylib */,
 				331D5BB31D41E3DF00A51372 /* libGLEW.a */,
 				331D5BB41D41E3DF00A51372 /* libGLEWmx.a */,
 				331D5BB51D41E3DF00A51372 /* libglfw3.a */,
-				331D5BA81D41E3C800A51372 /* image_DXT.c */,
-				331D5BA91D41E3C800A51372 /* image_helper.c */,
-				331D5BAA1D41E3C800A51372 /* SOIL.c */,
-				331D5BAB1D41E3C800A51372 /* stb_image_aug.c */,
 				331D5B7E1D41E0F700A51372 /* ModelY */,
 				331D5B951D41E0F800A51372 /* ModelYTests */,
 				331D5B7D1D41E0F700A51372 /* Products */,
@@ -263,10 +263,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				331D5BAC1D41E3C800A51372 /* image_DXT.c in Sources */,
-				331D5BAD1D41E3C800A51372 /* image_helper.c in Sources */,
-				331D5BAE1D41E3C800A51372 /* SOIL.c in Sources */,
-				331D5BAF1D41E3C800A51372 /* stb_image_aug.c in Sources */,
+				33C71D771D508F8700CA1056 /* image_DXT.c in Sources */,
+				33C71D781D508F8700CA1056 /* image_helper.c in Sources */,
+				33C71D791D508F8700CA1056 /* SOIL.c in Sources */,
+				33C71D7A1D508F8700CA1056 /* stb_image_aug.c in Sources */,
 				331D5B881D41E0F700A51372 /* ViewController.m in Sources */,
 				331D5B831D41E0F700A51372 /* AppDelegate.m in Sources */,
 				331D5BA71D41E38600A51372 /* main.cpp in Sources */,
@@ -487,6 +487,7 @@
 				331D5B9E1D41E0F800A51372 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		331D5B9F1D41E0F800A51372 /* Build configuration list for PBXNativeTarget "ModelYTests" */ = {
 			isa = XCConfigurationList;
@@ -495,6 +496,7 @@
 				331D5BA11D41E0F800A51372 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

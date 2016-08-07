@@ -97,16 +97,16 @@ int main()
     
     
     //SHOW SHADER
-    Shader shader("/Users/apple/Documents/OPENGL/ModelY/model_loading.vs", "/Users/apple/Documents/OPENGL/ModelY/model_loading.frag","/Users/apple/Documents/OPENGL/ModelY/model_loading.gs");
+    Shader shader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.frag","/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.gs");
     
     //NORMAL SHADER
-    Shader normalShader("/Users/apple/Documents/OPENGL/ModelY/model_normal.vs", "/Users/apple/Documents/OPENGL/ModelY/model_normal.frag","/Users/apple/Documents/OPENGL/ModelY/model_normal.gs");
+    Shader normalShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.frag","/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.gs");
     
     //TRIII SHADER
     //    Shader normalShader("/Users/apple/Documents/OPENGL/ModelTest/model_line.vs", "/Users/apple/Documents/OPENGL/ModelTest/model_line.frag","/Users/apple/Documents/OPENGL/ModelTest/model_line.gs");
     
     //DEPTH SHADER
-    Shader depthShader("/Users/apple/Documents/OPENGL/ModelY/shadow_mapping_depth.vs", "/Users/apple/Documents/OPENGL/ModelY/shadow_mapping_depth.frag");
+    Shader depthShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.frag");
     
     
     
