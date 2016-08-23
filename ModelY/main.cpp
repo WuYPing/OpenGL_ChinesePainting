@@ -286,7 +286,9 @@ int main()
         
         
         // Clear the colorbuffer
-        glClearColor(0.99f, 0.88f, 0.77f, 1.0f);
+        // Background Color
+        glClearColor(255.0/255,252.0/255,234.0/255,1.0f);
+        //        glClearColor(0.99f, 0.97f, 090.f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         
@@ -366,7 +368,7 @@ int main()
         // Add time component to geometry shader in the form of a uniform
         //        glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
         
-//        ourModel.Draw(shader);
+        //        ourModel.Draw(shader);
         
         
         
