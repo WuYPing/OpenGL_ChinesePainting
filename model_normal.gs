@@ -8,6 +8,7 @@ in VS_OUT {
     vec3 normal;
     vec3 FragPos;
     vec4 fragPosLightSpace;
+    vec2 TexCoord;
 } gs_in[];
 
 
@@ -15,10 +16,12 @@ out VS_OUT {
     vec3 normal;
     vec3 FragPos;
     vec4 fragPosLightSpace;
+    vec2 TexCoord;
 } vs_out;
 
 out float gDist;
 out vec2 gSpine;
+out vec2 TexCoords;
 
 uniform mat4 view;
 uniform sampler2D shadowMap;
@@ -60,7 +63,7 @@ void GenerateLine2(int a, int b)
     // 取得当前片元在光源视角下的深度
     float currentDepth = projCoords.z;
     
-    float HalfWidth = 0.005;
+    float HalfWidth = 0.01;
     float OverhangLength = 0.08;
     
     vec2 P0 = gl_in[a].gl_Position.xy;
@@ -70,16 +73,34 @@ void GenerateLine2(int a, int b)
     vec2 V = normalize(P1 - P0);
     vec2 N = vec2(-V.y, V.x) * HalfWidth;
     
+    
     gSpine = (P0 + 1.0) * 0.5;
     gDist = +HalfWidth;
-    gl_Position = gl_in[a].gl_Position + vec4(- N - E, 0, 1); EmitVertex();
+    gl_Position = gl_in[a].gl_Position + vec4(- N - E, 0, 1);
+    
+    TexCoords = vec2(0.0f, 0.0f);
+    EmitVertex();
+    
     gDist = -HalfWidth;
-    gl_Position = gl_in[a].gl_Position + vec4(+ N - E, 0, 1); EmitVertex();
+    gl_Position = gl_in[a].gl_Position + vec4(+ N - E, 0, 1);
+    
+    TexCoords = vec2(0.0f, 1.0f);
+    EmitVertex();
+    
+    
     gSpine = (P1 + 1.0) * 0.5;
     gDist = +HalfWidth;
-    gl_Position = gl_in[b].gl_Position + vec4(- N + E, 0, 1); EmitVertex();
+    gl_Position = gl_in[b].gl_Position + vec4(- N + E, 0, 1);
+    
+    TexCoords = vec2(1.0f, 0.0f);
+    EmitVertex();
+    
+    
     gDist = -HalfWidth;
-    gl_Position = gl_in[b].gl_Position + vec4(+ N + E, 0, 1); EmitVertex();
+    gl_Position = gl_in[b].gl_Position + vec4(+ N + E, 0, 1);
+    
+    TexCoords = vec2(1.0f, 1.0f);
+    EmitVertex();
     EndPrimitive();
     
 }
@@ -117,7 +138,8 @@ void main()
     vs_out.normal = gs_in[0].normal;
     vs_out.FragPos = gs_in[0].FragPos;
     vs_out.fragPosLightSpace = gs_in[0].fragPosLightSpace;
-    
+    vs_out.TexCoord = gs_in[0].TexCoord;
+    TexCoords = gs_in[0].TexCoord;
     //        GenerateLine(1,0);
     
     //    GenerateTri(2,0,4); // First vertex normal

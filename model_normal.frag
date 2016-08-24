@@ -6,15 +6,19 @@ in VS_OUT {
     vec3 normal;
     vec3 FragPos;
     vec4 fragPosLightSpace;
+    vec2 TexCoord;
 } fs_in;
 
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
 uniform sampler2D shadowMap;
+// Texture samplers
+uniform sampler2D ourTexture1;
 
 in float gDist;
 in vec2 gSpine;
+in vec2 TexCoords;
 
 float LinearizeDepth(float depth)
 {
@@ -68,7 +72,9 @@ void main()
     
     
     if(ddd < 0.5){
-        color = vec4(vec3(ddd), alpha);
+//                color = vec4(vec3(ddd), alpha);
+        
+        color = texture(ourTexture1, TexCoords);
     }else{
         discard;
     }

@@ -118,15 +118,15 @@ int main()
     //     Load models
     //    Model ourModel("/Users/apple/Downloads/nanosuit/nanosuit.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/PENRU.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/PENRU.obj");
     
-    //    Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
+    //        Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
     Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
     
@@ -186,6 +186,50 @@ int main()
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //load the stroke
+    
+    // Load and create a texture
+    GLuint texture1;
+    // ====================
+    // Texture 1
+    // ====================
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+    // Set our texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Set texture filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Load, create texture and generate mipmaps
+    int width, height;
+    unsigned char* image = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke.bmp", &width, &height, 0, SOIL_LOAD_RGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    SOIL_free_image_data(image);
+    glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -288,7 +332,7 @@ int main()
         // Clear the colorbuffer
         // Background Color
         glClearColor(255.0/255,252.0/255,234.0/255,1.0f);
-        //        glClearColor(0.99f, 0.97f, 090.f, 1.0f);
+        //        glClearColor(0.89f, 0.99f, 0.89f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         
@@ -296,9 +340,8 @@ int main()
         
         ///////2222222222222
         
-        //        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        //        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-        //        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
+        
+        
         
         // Now set transformation matrices for drawing normals
         normalShader.Use();
@@ -314,14 +357,23 @@ int main()
         
         glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         
-        //        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        //        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-        //        glClear(GL_DEPTH_BUFFER_BIT);
-        //        RenderScene(simpleDepthShader);
-        //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  
+        
+        
+       
         
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, depthMap);
+        
+     
+        // Bind Textures using texture units
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
+
+        
+        
+        
         
         ourModel.Draw(normalShader);
         
@@ -347,12 +399,8 @@ int main()
         
         shader.Use();   // <-- Don't forget this one!
         // Transformation matrices
-        //        glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth/(float)screenHeight, 0.1f, 100.0f);
-        //        glm::mat4 view = camera.GetViewMatrix();
-        
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        
         
         // Draw the loaded model
         //        glm::mat4 model;
