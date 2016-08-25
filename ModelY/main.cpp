@@ -126,7 +126,7 @@ int main()
     
     //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
     Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
     
