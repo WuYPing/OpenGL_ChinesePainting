@@ -122,13 +122,13 @@ int main()
     
     //        Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
-    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
+    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
     //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
-    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
+    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
-    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
+    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
     
     
     
@@ -214,7 +214,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // Load, create texture and generate mipmaps
     int width, height;
-    unsigned char* image = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke.bmp", &width, &height, 0, SOIL_LOAD_RGB);
+    unsigned char* image = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke4.bmp", &width, &height, 0, SOIL_LOAD_RGB);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
@@ -357,20 +357,20 @@ int main()
         
         glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         
-  
         
         
-       
+        
+        
         
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, depthMap);
         
-     
+        
         // Bind Textures using texture units
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
-
+        
         
         
         

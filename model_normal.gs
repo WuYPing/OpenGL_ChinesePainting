@@ -63,7 +63,7 @@ void GenerateLine2(int a, int b)
     // 取得当前片元在光源视角下的深度
     float currentDepth = projCoords.z;
     
-    float HalfWidth = 0.01;
+    float HalfWidth = 0.02;
     float OverhangLength = 0.08;
     
     vec2 P0 = gl_in[a].gl_Position.xy;
@@ -72,17 +72,19 @@ void GenerateLine2(int a, int b)
     vec2 E = OverhangLength * (P1 - P0);
     vec2 V = normalize(P1 - P0);
     vec2 N = vec2(-V.y, V.x) * HalfWidth;
+    vec2 Na =  normalize(vec2(gs_in[a].normal.x,gs_in[a].normal.y))* HalfWidth;
+    vec2 Nb =  normalize(vec2(gs_in[b].normal.x,gs_in[b].normal.y))* HalfWidth;
     
     
     gSpine = (P0 + 1.0) * 0.5;
     gDist = +HalfWidth;
-    gl_Position = gl_in[a].gl_Position + vec4(- N - E, 0, 1);
+    gl_Position = gl_in[a].gl_Position + vec4(- Na , 0, 1);
     
     TexCoords = vec2(0.0f, 0.0f);
     EmitVertex();
     
     gDist = -HalfWidth;
-    gl_Position = gl_in[a].gl_Position + vec4(+ N - E, 0, 1);
+    gl_Position = gl_in[a].gl_Position + vec4(+ Na , 0, 1);
     
     TexCoords = vec2(0.0f, 1.0f);
     EmitVertex();
@@ -90,14 +92,14 @@ void GenerateLine2(int a, int b)
     
     gSpine = (P1 + 1.0) * 0.5;
     gDist = +HalfWidth;
-    gl_Position = gl_in[b].gl_Position + vec4(- N + E, 0, 1);
+    gl_Position = gl_in[b].gl_Position + vec4(- Nb , 0, 1);
     
     TexCoords = vec2(1.0f, 0.0f);
     EmitVertex();
     
     
     gDist = -HalfWidth;
-    gl_Position = gl_in[b].gl_Position + vec4(+ N + E, 0, 1);
+    gl_Position = gl_in[b].gl_Position + vec4(+ Nb , 0, 1);
     
     TexCoords = vec2(1.0f, 1.0f);
     EmitVertex();
