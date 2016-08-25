@@ -3,6 +3,7 @@ out vec4 color;
 //in vec3 sssnormal;
 
 in VS_OUT {
+    vec3 position;
     vec3 normal;
     vec3 FragPos;
     vec4 fragPosLightSpace;

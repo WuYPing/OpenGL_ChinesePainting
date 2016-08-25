@@ -5,6 +5,7 @@ layout (triangle_strip, max_vertices = 4) out;
 
 
 in VS_OUT {
+    vec3 position;
     vec3 normal;
     vec3 FragPos;
     vec4 fragPosLightSpace;
@@ -13,6 +14,7 @@ in VS_OUT {
 
 
 out VS_OUT {
+    vec3 position;
     vec3 normal;
     vec3 FragPos;
     vec4 fragPosLightSpace;
@@ -63,7 +65,7 @@ void GenerateLine2(int a, int b)
     // 取得当前片元在光源视角下的深度
     float currentDepth = projCoords.z;
     
-    float HalfWidth = 0.02;
+    float HalfWidth = 0.01;
     float OverhangLength = 0.08;
     
     vec2 P0 = gl_in[a].gl_Position.xy;
@@ -80,13 +82,15 @@ void GenerateLine2(int a, int b)
     gDist = +HalfWidth;
     gl_Position = gl_in[a].gl_Position + vec4(- Na , 0, 1);
     
-    TexCoords = vec2(0.0f, 0.0f);
+//    TexCoords = vec2(0.0f, 0.0f);
+     TexCoords = vec2(gs_in[a].position.xy);
     EmitVertex();
     
     gDist = -HalfWidth;
     gl_Position = gl_in[a].gl_Position + vec4(+ Na , 0, 1);
     
-    TexCoords = vec2(0.0f, 1.0f);
+//    TexCoords = vec2(0.0f, 1.0f);
+     TexCoords = vec2(gs_in[a].position.xy);
     EmitVertex();
     
     
@@ -94,14 +98,16 @@ void GenerateLine2(int a, int b)
     gDist = +HalfWidth;
     gl_Position = gl_in[b].gl_Position + vec4(- Nb , 0, 1);
     
-    TexCoords = vec2(1.0f, 0.0f);
+//    TexCoords = vec2(1.0f, 0.0f);
+     TexCoords = vec2(gs_in[b].position.xy);
     EmitVertex();
     
     
     gDist = -HalfWidth;
     gl_Position = gl_in[b].gl_Position + vec4(+ Nb , 0, 1);
     
-    TexCoords = vec2(1.0f, 1.0f);
+//    TexCoords = vec2(1.0f, 1.0f);
+     TexCoords = vec2(gs_in[b].position.xy);
     EmitVertex();
     EndPrimitive();
     
@@ -136,7 +142,7 @@ vec3 GetNormalHere(int aa, int bb, int cc)//312
 void main()
 {
     
-    
+    vs_out.position = gs_in[0].position;
     vs_out.normal = gs_in[0].normal;
     vs_out.FragPos = gs_in[0].FragPos;
     vs_out.fragPosLightSpace = gs_in[0].fragPosLightSpace;

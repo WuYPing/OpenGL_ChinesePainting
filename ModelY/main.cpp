@@ -126,9 +126,9 @@ int main()
     
     //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
-    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
+    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
+    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
     
     
     
@@ -363,11 +363,13 @@ int main()
         
         
         glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, depthMap);
         
         
         // Bind Textures using texture units
         glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
         
