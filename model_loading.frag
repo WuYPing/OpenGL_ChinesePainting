@@ -12,6 +12,7 @@ uniform sampler2D texture_diffuse1;
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
+uniform sampler2D shadowMap;
 
 
 float LinearizeDepth(float depth)
@@ -25,6 +26,8 @@ float LinearizeDepth(float depth)
 void main()
 {
     float depth = LinearizeDepth(gl_FragCoord.z);
-//    color = vec4(vec3(depth), 1.0f);
-    color = vec4(vec3(gl_FragCoord.z), 1.0f);
+    float depth2 = texture(shadowMap, fs_in.texCoords).r;
+//    color = vec4(vec3(depth2), 1.0f);
+    //    color = vec4(vec3(gl_FragCoord.z), 1.0f);
+        color = vec4(vec3(0.97f,0.85f,0.83f), 1.0f);
 }

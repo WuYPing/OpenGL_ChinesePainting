@@ -33,6 +33,13 @@ vec4 explode(vec4 position, vec3 normal)
     return position + vec4(0.0f, 0.0f ,0.0f ,0.0f);
 }
 
+vec4 explode(vec4 position)
+{
+    return position + vec4(0.0f, 0.0f ,0.0f ,0.0f);
+}
+
+
+
 vec3 GetNormal()
 {
     vec3 a = vec3(gl_in[0].gl_Position) - vec3(gl_in[1].gl_Position);
@@ -42,16 +49,18 @@ vec3 GetNormal()
 
 void main() {
     
+    vs_out.texCoords = gs_in[0].texCoords;
     vs_out.normal = GetNormal();
     vec3 normal = GetNormal();
     
-    gl_Position = explode(gl_in[0].gl_Position, normal);
+    
+    gl_Position = explode(gl_in[0].gl_Position);
     TexCoords = gs_in[0].texCoords;
     EmitVertex();
-    gl_Position = explode(gl_in[2].gl_Position, normal);
+    gl_Position = explode(gl_in[2].gl_Position);
     TexCoords = gs_in[2].texCoords;
     EmitVertex();
-    gl_Position = explode(gl_in[4].gl_Position, normal);
+    gl_Position = explode(gl_in[4].gl_Position);
     TexCoords = gs_in[4].texCoords;
     EmitVertex();
     EndPrimitive();

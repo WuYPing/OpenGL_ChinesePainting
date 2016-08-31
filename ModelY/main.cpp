@@ -124,7 +124,7 @@ int main()
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
-    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
+    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
     //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
@@ -164,6 +164,8 @@ int main()
     
     normalShader.Use();
     glUniform1i(glGetUniformLocation(normalShader.Program, "shadowMap"), 0);
+    shader.Use();
+    glUniform1i(glGetUniformLocation(shader.Program, "shadowMap"), 0);
     //
     //
     //    // Configure depth map FBO
@@ -239,7 +241,7 @@ int main()
     //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     //        // Draw in point
-    //            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    //        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
     
     
     
@@ -418,7 +420,9 @@ int main()
         // Add time component to geometry shader in the form of a uniform
         //        glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
         
-        //        ourModel.Draw(shader);
+        
+        
+        ourModel.Draw(shader);
         
         
         

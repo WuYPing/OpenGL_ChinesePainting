@@ -43,7 +43,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     // 检查当前片元是否在阴影中
     float bias = 0.005;
     float shadow = currentDepth - bias> closestDepth  ? 1.0 : 0.0;
-    
+    // 如果在阴影中返回1 否则返回0
     return shadow;
 }
 
@@ -57,25 +57,24 @@ void main()
     
     
     
-    vec2 texCoord = gSpine;
-    float depth = texture(shadowMap, texCoord).r;
-    if (depth < gl_FragCoord.z)
-        discard;
+//    vec2 texCoord = gSpine;
+//    float depth = texture(shadowMap, vec2(0.0f, 1.0f)).r;
+//    if (depth < gl_FragCoord.z)
+//        discard;
     
     
     
-    float alpha = 1.0;
-    float d = abs(gDist);
-    float tipLength = 2.0 * fwidth(d);
-    if (d > HalfWidth - tipLength)
-        alpha = 1.0 - (d - HalfWidth + tipLength) / tipLength;
+//    float alpha = 1.0;
+//    float d = abs(gDist);
+//    float tipLength = 2.0 * fwidth(d);
+//    if (d > HalfWidth - tipLength)
+//        alpha = 1.0 - (d - HalfWidth + tipLength) / tipLength;
     
     
     
-    if(ddd < 0.5){
-//                color = vec4(vec3(ddd), alpha);
-        
-        color = texture(ourTexture1, TexCoords);
+    if(ddd == 0.0){
+//        color = vec4(vec3(ddd), 1.0f);
+      color = texture(ourTexture1, TexCoords);
     }else{
         discard;
     }

@@ -56,16 +56,16 @@ void GenerateLine(int a, int b)
 void GenerateLine2(int a, int b)
 {
     
-    // 执行透视除法
-    vec3 projCoords = gs_in[0].fragPosLightSpace.xyz / gs_in[0].fragPosLightSpace.w;
-    // 变换到[0,1]的范围
-    projCoords = projCoords * 0.5 + 0.5;
-    // 取得最近点的深度(使用[0,1]范围下的fragPosLight当坐标)
-    float closestDepth = texture(shadowMap, projCoords.xy).r;
-    // 取得当前片元在光源视角下的深度
-    float currentDepth = projCoords.z;
+    //    // 执行透视除法
+    //    vec3 projCoords = gs_in[0].fragPosLightSpace.xyz / gs_in[0].fragPosLightSpace.w;
+    //    // 变换到[0,1]的范围
+    //    projCoords = projCoords * 0.5 + 0.5;
+    //    // 取得最近点的深度(使用[0,1]范围下的fragPosLight当坐标)
+    //    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    //    // 取得当前片元在光源视角下的深度
+    //    float currentDepth = projCoords.z;
     
-    float HalfWidth = 0.01;
+    float HalfWidth = 0.005;
     float OverhangLength = 0.08;
     
     vec2 P0 = gl_in[a].gl_Position.xy;
@@ -80,14 +80,14 @@ void GenerateLine2(int a, int b)
     
     gSpine = (P0 + 1.0) * 0.5;
     gDist = +HalfWidth;
-    gl_Position = gl_in[a].gl_Position + vec4(- Na , 0, 1);
+    gl_Position = gl_in[a].gl_Position + vec4(- Na , 0, 0);
     
     //    TexCoords = vec2(0.0f, 0.0f);
     TexCoords = vec2(gs_in[a].position.xy);
     EmitVertex();
     
     gDist = -HalfWidth;
-    gl_Position = gl_in[a].gl_Position + vec4(+ Na , 0, 1);
+    gl_Position = gl_in[a].gl_Position + vec4(+ Na , 0, 0);
     
     //    TexCoords = vec2(0.0f, 1.0f);
     TexCoords = vec2(gs_in[a].position.xy);
@@ -96,7 +96,7 @@ void GenerateLine2(int a, int b)
     
     gSpine = (P1 + 1.0) * 0.5;
     gDist = +HalfWidth;
-    gl_Position = gl_in[b].gl_Position + vec4(- Nb , 0, 1);
+    gl_Position = gl_in[b].gl_Position + vec4(- Nb , 0, 0);
     
     //    TexCoords = vec2(1.0f, 0.0f);
     TexCoords = vec2(gs_in[b].position.xy);
@@ -104,7 +104,7 @@ void GenerateLine2(int a, int b)
     
     
     gDist = -HalfWidth;
-    gl_Position = gl_in[b].gl_Position + vec4(+ Nb , 0, 1);
+    gl_Position = gl_in[b].gl_Position + vec4(+ Nb , 0, 0);
     
     //    TexCoords = vec2(1.0f, 1.0f);
     TexCoords = vec2(gs_in[b].position.xy);
@@ -112,6 +112,7 @@ void GenerateLine2(int a, int b)
     EndPrimitive();
     
 }
+
 
 
 void GenerateOut(int a)
@@ -209,18 +210,18 @@ void main()
     
     
     //z just like the self view point
-    //    if( N042.z * N021.z < 0. )
-    //    {
-    //        GenerateLine(0,2);
-    //    }
-    //    if( N042.z * N243.z < 0. )
-    //    {
-    //        GenerateLine(2,4);
-    //    }
-    //    if( N042.z * N405.z < 0. )
-    //    {
-    //        GenerateLine(4,0);
-    //    }
+//            if( N042.z * N021.z < 0. )
+//            {
+//                GenerateLine(0,2);
+//            }
+//            if( N042.z * N243.z < 0. )
+//            {
+//                GenerateLine(2,4);
+//            }
+//            if( N042.z * N405.z < 0. )
+//            {
+//                GenerateLine(4,0);
+//            }
     
     
     //width one
