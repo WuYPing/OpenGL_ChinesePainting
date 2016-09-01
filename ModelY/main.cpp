@@ -37,6 +37,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
+void genTexCoordOffsets(GLuint width, GLuint height, GLfloat step);
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -44,8 +45,18 @@ bool keys[1024];
 GLfloat lastX = 400, lastY = 300;
 bool firstMouse = true;
 
+
+
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
+
+
+// Set up texture sampling offset storage
+const GLint tcOffsetColumns = 5;
+const GLint tcOffsetRows    = 5;
+GLfloat	texCoordOffsets[tcOffsetColumns * tcOffsetRows * 2];
+
+
 
 // The MAIN function, from here we start our application and run our Game loop
 int main()
@@ -199,9 +210,7 @@ int main()
     
     
     
-    //load the stroke
-    
-    // Load and create a texture
+    //LOAD THE STROKE PARTTTTTT
     GLuint texture1;
     // ====================
     // Texture 1
@@ -223,6 +232,9 @@ int main()
     glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
     
     
+    //generate the texcoordoffsets and send to fragment
+    genTexCoordOffsets(screenWidth, screenHeight, 1.0f);
+  
     
     
     
@@ -237,7 +249,8 @@ int main()
     
     
     
-    //    // Draw in wireframe
+    
+    //    // Draw in wirefrasme
     //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     //        // Draw in point
@@ -255,9 +268,39 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         
+        
+        
+        
+        
+        
+        
+        
         // Check and call events
         glfwPollEvents();
         Do_Movement();
+        
+        
+        
+        
+        
+        
+        
+        
+        // Clear the colorbuffer
+        // Background Color
+                glClearColor(255.0/255,252.0/255,234.0/255,1.0f);
+//        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -329,18 +372,7 @@ int main()
         
         
         
-        
-        
-        // Clear the colorbuffer
-        // Background Color
-        glClearColor(255.0/255,252.0/255,234.0/255,1.0f);
-        //        glClearColor(0.89f, 0.99f, 0.89f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        
-        
-        
-        ///////2222222222222
+        ///////2222222222222 DRAW THE SILHOUETTE
         
         
         
@@ -361,12 +393,11 @@ int main()
         
         
         
-        
-        
-        
+        // Bind depth Textures
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, depthMap);
+        
         
         
         // Bind Textures using texture units
@@ -375,6 +406,9 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture1);
         glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
         
+        
+        
+        glUniform2fv(glGetUniformLocation(normalShader.Program, "tcOffset"),50, texCoordOffsets); // Pass in 25 vec2s in our texture coordinate offset array
         
         
         
@@ -397,7 +431,7 @@ int main()
         
         
         
-        ////3333333333333
+        ////3333333333333 DRAW THE INTERIOR
         
         //DRAG OUT THE NORMALLLS
         
@@ -422,7 +456,7 @@ int main()
         
         
         
-        ourModel.Draw(shader);
+        //        ourModel.Draw(shader);
         
         
         
@@ -503,6 +537,24 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
+}
+
+
+// Calculate texture coordinate offsets for kernel convolution effects
+void genTexCoordOffsets(GLuint width, GLuint height, GLfloat step) // Note: Change this step value to increase the number of pixels we sample across...
+{
+    // Note: You can multiply the step to displace the samples further. Do this with diff values horiz and vert and you have directional blur of a sort...
+    float xInc = step / (GLfloat)(screenWidth);
+    float yInc = step / (GLfloat)(screenHeight);
+    
+    for (int i = 0; i < tcOffsetColumns; i++)
+    {
+        for (int j = 0; j < tcOffsetRows; j++)
+        {
+            texCoordOffsets[(((i*5)+j)*2)+0] = (-2.0f * xInc) + ((GLfloat)i * xInc);
+            texCoordOffsets[(((i*5)+j)*2)+1] = (-2.0f * yInc) + ((GLfloat)j * yInc);
+        }
+    }
 }
 
 #pragma endregion

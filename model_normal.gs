@@ -65,7 +65,7 @@ void GenerateLine2(int a, int b)
     //    // 取得当前片元在光源视角下的深度
     //    float currentDepth = projCoords.z;
     
-    float HalfWidth = 0.005;
+    float HalfWidth = 0.01;
     float OverhangLength = 0.08;
     
     vec2 P0 = gl_in[a].gl_Position.xy;

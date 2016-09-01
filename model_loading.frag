@@ -29,5 +29,5 @@ void main()
     float depth2 = texture(shadowMap, fs_in.texCoords).r;
 //    color = vec4(vec3(depth2), 1.0f);
     //    color = vec4(vec3(gl_FragCoord.z), 1.0f);
-        color = vec4(vec3(0.97f,0.85f,0.83f), 1.0f);
+        color = vec4(vec3(0.97f,0.75f,0.76f), 1.0f);
 }
