@@ -91,23 +91,23 @@ void main()
         
         
         
-        // gaussian blur?
-        vec4 sample0,sample1,sample2,sample3,sample4,sample5,sample6,sample7;
-        
-        //the trick is fstep
-        //set proper value could lead to good effection
-        float fstep= 0.055;
-        sample0=texture(ourTexture1,TexCoords+ vec2(-fstep,-fstep));
-        sample1=texture(ourTexture1,TexCoords+ vec2(+fstep,-fstep));
-        sample2=texture(ourTexture1,TexCoords+ vec2(+fstep,+fstep));
-        sample3=texture(ourTexture1,TexCoords+ vec2(-fstep,+fstep));
-        sample4=texture(ourTexture1,TexCoords+ vec2(-fstep,0));
-        sample5=texture(ourTexture1,TexCoords+ vec2(+fstep,0));
-        sample6=texture(ourTexture1,TexCoords+ vec2(0,-fstep));
-        sample7=texture(ourTexture1,TexCoords+ vec2(0,+fstep));
-        
-        vec4 fcolor=(sample0+sample1+sample2+sample3+sample4+sample5+sample6+sample7) / 8.0;
-        color =  fcolor;
+        // gaussian blur? THE ONLY ONE WORK FINE NOW
+        //        vec4 sample0,sample1,sample2,sample3,sample4,sample5,sample6,sample7;
+        //
+        //        //the trick is fstep
+        //        //set proper value could lead to good effection
+        //        float fstep= 0.055;
+        //        sample0=texture(ourTexture1,TexCoords+ vec2(-fstep,-fstep));
+        //        sample1=texture(ourTexture1,TexCoords+ vec2(+fstep,-fstep));
+        //        sample2=texture(ourTexture1,TexCoords+ vec2(+fstep,+fstep));
+        //        sample3=texture(ourTexture1,TexCoords+ vec2(-fstep,+fstep));
+        //        sample4=texture(ourTexture1,TexCoords+ vec2(-fstep,0));
+        //        sample5=texture(ourTexture1,TexCoords+ vec2(+fstep,0));
+        //        sample6=texture(ourTexture1,TexCoords+ vec2(0,-fstep));
+        //        sample7=texture(ourTexture1,TexCoords+ vec2(0,+fstep));
+        //
+        //        vec4 fcolor=(sample0+sample1+sample2+sample3+sample4+sample5+sample6+sample7) / 8.0;
+        //        color =  fcolor;
         
         
         
@@ -165,7 +165,7 @@ void main()
         
         
         //the original one
-        //                color = texture(ourTexture1, TexCoords);
+        color = texture(ourTexture1, TexCoords);
     }else{
         discard;
     }

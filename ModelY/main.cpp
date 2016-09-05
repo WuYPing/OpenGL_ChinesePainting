@@ -30,7 +30,7 @@
 #include <SOIL.h>
 
 // Properties
-GLuint screenWidth = 800, screenHeight = 600;
+GLuint screenWidth = 800*2, screenHeight = 600*2;
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -38,6 +38,10 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
 void genTexCoordOffsets(GLuint width, GLuint height, GLfloat step);
+
+// Framebuffer
+GLuint loadTexture(GLchar* path, GLboolean alpha = false);
+GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil);
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -69,7 +73,7 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);// make macos happy! \(^ 3 ^ )/
     
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", nullptr, nullptr); // Windowed
+    GLFWwindow* window = glfwCreateWindow(screenWidth/2, screenHeight/2, "LearnOpenGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
     
     // Set the required callback functions
@@ -89,7 +93,6 @@ int main()
     
     // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
-    
     glEnable(GL_LINE_SMOOTH);
     
     //    glDepthFunc(GL_LEQUAL);
@@ -98,9 +101,6 @@ int main()
     //        glEnable(GL_CULL_FACE);
     //        glCullFace(GL_BACK);
     //        glFrontFace(GL_CW);
-    
-    
-    
     
     
     
@@ -118,6 +118,40 @@ int main()
     
     //DEPTH SHADER
     Shader depthShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.frag");
+    
+    //FRAMEBUFFER SHADER
+    Shader frameShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen.frag");
+    
+    
+    
+    
+    
+    
+    
+    
+    GLfloat quadVertices[] = {   // Vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+        // Positions   // TexCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+        1.0f, -1.0f,  1.0f, 0.0f,
+        
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        1.0f, -1.0f,  1.0f, 0.0f,
+        1.0f,  1.0f,  1.0f, 1.0f
+    };
+    // Setup screen VAO
+    GLuint quadVAO, quadVBO;
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+    glBindVertexArray(0);
+    
     
     
     
@@ -153,19 +187,18 @@ int main()
     
     
     
-    // Set projection matrix
+    //    // Set projection matrix
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 1.0f, 100.0f);
     shader.Use();
     glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     // Also one for normal shader
     normalShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    
     depthShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     
-    
-    
+//    frameShader.Use();
+//    glUniformMatrix4fv(glGetUniformLocation(frameShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     
     
     
@@ -177,10 +210,49 @@ int main()
     glUniform1i(glGetUniformLocation(normalShader.Program, "shadowMap"), 0);
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.Program, "shadowMap"), 0);
-    //
-    //
+    
+    
+    
+    
+    
+    
+    
+    
+    // Framebuffers
+    GLuint framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    // Create a color attachment texture
+    GLuint textureColorbuffer;
+    glGenTextures(1, &textureColorbuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+    // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+    GLuint rbo;
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight); // Use a single renderbuffer object for both a depth AND stencil buffer.
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
+    // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    
+    
+    
+    
+    
     //    // Configure depth map FBO
-    const GLuint SHADOW_WIDTH = 800*2, SHADOW_HEIGHT = 600*2;
+
+    
     GLuint depthMapFBO;
     glGenFramebuffers(1, &depthMapFBO);
     // - Create depth texture
@@ -188,7 +260,7 @@ int main()
     glGenTextures(1, &depthMap);
     glBindTexture(GL_TEXTURE_2D, depthMap);
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, screenWidth, screenHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -196,11 +268,10 @@ int main()
     
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
+    //    glDrawBuffer(GL_NONE);
+    //    glReadBuffer(GL_NONE);
+    
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
-    
     
     
     
@@ -233,8 +304,17 @@ int main()
     
     
     //generate the texcoordoffsets and send to fragment
-    genTexCoordOffsets(screenWidth, screenHeight, 1.0f);
-  
+    //    genTexCoordOffsets(screenWidth, screenHeight, 1.0f);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -251,7 +331,7 @@ int main()
     
     
     //    // Draw in wirefrasme
-    //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     //        // Draw in point
     //        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
@@ -270,11 +350,6 @@ int main()
         
         
         
-        
-        
-        
-        
-        
         // Check and call events
         glfwPollEvents();
         Do_Movement();
@@ -286,135 +361,92 @@ int main()
         
         
         
+        
+        //        glReadBuffer(GL_FRONT_AND_BACK);
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        
         // Clear the colorbuffer
-        // Background Color
-                glClearColor(255.0/255,252.0/255,234.0/255,1.0f);
-//        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        //                glClearColor(125.0/255,152.0/255,134.0/255,1.0f);
+        glClearColor(1.0f,1.0f,1.0f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        
+        
+      
         
         
         
         
+        // 1 RENDER THE DEPTH BUFFER
+          glViewport(0, 0, screenWidth, screenHeight);
         
         
-        
-        
-        
-        
-        
-        
-        
-        //For the depth buffer value
-        
-        // 1. Render depth of scene to texture (from ligth's perspective)
-        // - Get light projection/view matrix.
-        
-        GLfloat near_plane = 1.0f, far_plane = 7.5f;
-        
+        GLfloat near_plane = 0.3f, far_plane = 7.5f;
         // - now render scene from light's point of view
         depthShader.Use();
-        //        glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         
-        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+        
+        
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        
+        
         glClear(GL_DEPTH_BUFFER_BIT);
-        
-        
-        
-        
         glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth/(float)screenHeight, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        
-        glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        
-        
-        
-        
-        
         glm::mat4 dprojection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
         glm::mat4 lightSpaceMatrix = dprojection * view;
-        
-        glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-        
-        
-        
-        
-        
-        
         // Draw the loaded model
         glm::mat4 model;
         model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
         model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
         
         
-        
+        glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         
-        // Add time component to geometry shader in the form of a uniform
-        //        glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
-        
         ourModel.Draw(depthShader);
-        
-        
-        
-        
-        
         /////////////
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         
-        
-        
-        
-        
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
         
         
         
         ///////2222222222222 DRAW THE SILHOUETTE
-        
-        
-        
-        
-        // Now set transformation matrices for drawing normals
         normalShader.Use();
-        glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
-        
         
         model = glm::mat4();
         model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
         model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
-        glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        
-        glUniform1f(glGetUniformLocation(normalShader.Program, "time"), glfwGetTime());
-        
-        glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-        
-        
         
         // Bind depth Textures
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, depthMap);
-        
-        
-        
-        // Bind Textures using texture units
+        //         Bind Textures using texture units
         glActiveTexture(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture1);
+        
+        glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
+        glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
-        
-        
-        
         glUniform2fv(glGetUniformLocation(normalShader.Program, "tcOffset"),50, texCoordOffsets); // Pass in 25 vec2s in our texture coordinate offset array
-        
-        
-        
-        
         ourModel.Draw(normalShader);
         
+        glBindTexture(GL_TEXTURE_2D, 0);
+        
+        
+        
+        
+        
+        //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         
         
         
@@ -426,36 +458,19 @@ int main()
         
         
         
-        
-        
-        
-        
-        
-        ////3333333333333 DRAW THE INTERIOR
-        
-        //DRAG OUT THE NORMALLLS
-        
-        shader.Use();   // <-- Don't forget this one!
-        // Transformation matrices
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        
-        // Draw the loaded model
-        //        glm::mat4 model;
+        // 3 DRAW THE INTERIOR
+        //        shader.Use();   // <-- Don't forget this one!
+        //
+        //        model = glm::mat4();
         //        model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
         //        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
-        
-        
-        model = glm::mat4();
-        model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        
-        // Add time component to geometry shader in the form of a uniform
+        //
+        //        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        //        // Transformation matrices
+        //        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        //        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        //        // Add time component to geometry shader in the form of a uniform
         //        glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
-        
-        
-        
         //        ourModel.Draw(shader);
         
         
@@ -466,7 +481,32 @@ int main()
         
         
         
+        // 4 FRAMEBUFFER USING
+        /////////////////////////////////////////////////////
+        // Bind to default framebuffer again and draw the
+        // quad plane with attched screen texture.
+        // //////////////////////////////////////////////////
+        // First pass
         
+        
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        // Clear all relevant buffers
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
+        
+        glViewport(0, 0, screenWidth, screenHeight);
+        
+        // Draw Screen
+        frameShader.Use();
+        glBindVertexArray(quadVAO);
+        
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
         
         
         
@@ -485,8 +525,49 @@ int main()
 
 
 
+// Generates a texture that is suited for attachments to a framebuffer
+GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil)
+{
+    // What enum to use?
+    GLenum attachment_type = GL_RGB;
+    if(!depth && !stencil)
+        attachment_type = GL_RGB;
+    else if(depth && !stencil)
+        attachment_type = GL_DEPTH_COMPONENT;
+    else if(!depth && stencil)
+        attachment_type = GL_STENCIL_INDEX;
+    
+    //Generate texture ID and load texture data
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    if(!depth && !stencil)
+        glTexImage2D(GL_TEXTURE_2D, 0, attachment_type, screenWidth, screenHeight, 0, attachment_type, GL_UNSIGNED_BYTE, NULL);
+    else // Using both a stencil and depth test, needs special format arguments
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, screenWidth, screenHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    return textureID;
+}
 
-
+// Calculate texture coordinate offsets for kernel convolution effects
+void genTexCoordOffsets(GLuint width, GLuint height, GLfloat step) // Note: Change this step value to increase the number of pixels we sample across...
+{
+    // Note: You can multiply the step to displace the samples further. Do this with diff values horiz and vert and you have directional blur of a sort...
+    float xInc = step / (GLfloat)(screenWidth);
+    float yInc = step / (GLfloat)(screenHeight);
+    
+    for (int i = 0; i < tcOffsetColumns; i++)
+    {
+        for (int j = 0; j < tcOffsetRows; j++)
+        {
+            texCoordOffsets[(((i*5)+j)*2)+0] = (-2.0f * xInc) + ((GLfloat)i * xInc);
+            texCoordOffsets[(((i*5)+j)*2)+1] = (-2.0f * yInc) + ((GLfloat)j * yInc);
+        }
+    }
+}
 
 #pragma region "User input"
 
@@ -537,24 +618,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
-}
-
-
-// Calculate texture coordinate offsets for kernel convolution effects
-void genTexCoordOffsets(GLuint width, GLuint height, GLfloat step) // Note: Change this step value to increase the number of pixels we sample across...
-{
-    // Note: You can multiply the step to displace the samples further. Do this with diff values horiz and vert and you have directional blur of a sort...
-    float xInc = step / (GLfloat)(screenWidth);
-    float yInc = step / (GLfloat)(screenHeight);
-    
-    for (int i = 0; i < tcOffsetColumns; i++)
-    {
-        for (int j = 0; j < tcOffsetRows; j++)
-        {
-            texCoordOffsets[(((i*5)+j)*2)+0] = (-2.0f * xInc) + ((GLfloat)i * xInc);
-            texCoordOffsets[(((i*5)+j)*2)+1] = (-2.0f * yInc) + ((GLfloat)j * yInc);
-        }
-    }
 }
 
 #pragma endregion
