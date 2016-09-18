@@ -459,19 +459,19 @@ int main()
         
         
         // 3 DRAW THE INTERIOR
-        //        shader.Use();   // <-- Don't forget this one!
-        //
-        //        model = glm::mat4();
-        //        model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
-        //        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
-        //
-        //        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        //        // Transformation matrices
-        //        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-        //        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        //        // Add time component to geometry shader in the form of a uniform
-        //        glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
-        //        ourModel.Draw(shader);
+                shader.Use();   // <-- Don't forget this one!
+        
+                model = glm::mat4();
+                model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
+                model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
+        
+                glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+                // Transformation matrices
+                glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+                glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+                // Add time component to geometry shader in the form of a uniform
+                glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
+//                ourModel.Draw(shader);
         
         
         

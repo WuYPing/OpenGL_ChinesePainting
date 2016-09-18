@@ -8,7 +8,7 @@ const float offset = 1.0 / 1000;
 void main()
 {
     //    color = vec4(vec3(1.0 - texture(screenTexture, TexCoords)), 1.0);
-    color =texture(screenTexture, TexCoords);
+//    color =texture(screenTexture, TexCoords);
     //    color =vec4(0.0f,1.0f,1.0f,1.0f);
     
     
@@ -45,34 +45,15 @@ void main()
     
     
     
-    vec2 offsets2[49] = vec2[](
-                               vec2(3*offset,3*offset),vec2(3*offset,2*offset),vec2(3*offset,1*offset),vec2(3*offset,0*offset),vec2(3*offset,-1*offset),vec2(3*offset,-2*offset),vec2(3*offset,-3*offset),
-                               vec2(2*offset,3*offset),vec2(2*offset,2*offset),vec2(2*offset,1*offset),vec2(2*offset,0*offset),vec2(2*offset,-1*offset),vec2(2*offset,-2*offset),vec2(2*offset,-3*offset),
-                               vec2(1*offset,3*offset),vec2(1*offset,2*offset),vec2(1*offset,1*offset),vec2(1*offset,0*offset),vec2(1*offset,-1*offset),vec2(1*offset,-2*offset),vec2(1*offset,-3*offset),
-                               vec2(0*offset,3*offset),vec2(0*offset,2*offset),vec2(0*offset,1*offset),vec2(0*offset,0*offset),vec2(0*offset,-1*offset),vec2(0*offset,-2*offset),vec2(0*offset,-3*offset),
-                               vec2(-1*offset,3*offset),vec2(-1*offset,2*offset),vec2(-1*offset,1*offset),vec2(-1*offset,0*offset),vec2(-1*offset,-1*offset),vec2(-1*offset,-2*offset),vec2(-1*offset,-3*offset),
-                               vec2(-2*offset,3*offset),vec2(-2*offset,2*offset),vec2(-2*offset,1*offset),vec2(-2*offset,0*offset),vec2(-2*offset,-1*offset),vec2(-2*offset,-2*offset),vec2(-2*offset,-3*offset),
-                               vec2(-3*offset,3*offset),vec2(-3*offset,2*offset),vec2(-3*offset,1*offset),vec2(-3*offset,0*offset),vec2(-3*offset,-1*offset),vec2(-3*offset,-2*offset),vec2(-3*offset,-3*offset)
-);
-    
+
     
     float kernel[9] = float[](
                               1, 1, 1,
-                              1, 1, 1,
+                              1, 7, 1,
                               1, 1, 1
                               );
     
-    
-    float kernel2[49] = float[](
-                                1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1,
-                                1, 1, 1, 1, 1, 1, 1
-                                );
-    
+
     
     vec4 sampleTex[9];
     for(int i = 0; i < 9; i++)
@@ -88,7 +69,7 @@ void main()
     
     col = col/9;
     color = vec4(col, 1.0);
-    
+
     
     
     
