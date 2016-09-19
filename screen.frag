@@ -1,16 +1,58 @@
 #version 330 core
+
+
+#define SORT_SIZE  5
+
 in vec2 TexCoords;
 out vec4 color;
+
+float sort[SORT_SIZE];
+float medians[SORT_SIZE];
+
+// [0., 1.] -> [0, 255]
+//float quant(float x)
+//{
+//    x = clamp(x, 0., 1.);
+//    return floor(x * 255.);
+//}
+
+float pack(vec3 c)
+{
+    float lum = (c.x + c.y + c.z) * (1. / 3.);
+    
+    return lum;
+}
+
+vec3 unpack(float x)
+{
+    return vec3(x);
+}
+
+#define SWAP(a,b) { float t = sort[a]; sort[a] = sort[b]; sort[b] = t; }
+void bubble_sort(int num)// 简单的冒泡排序
+{
+    // 把最小值移到最左边
+    for(int j = 0; j < num; ++j)
+    {
+        for(int i= num-1; i >j; --i)
+        {
+            if(sort[i] < sort[i-1])
+            {
+                SWAP(i, i-1);
+            }
+        }
+    }
+}
+
+const vec2 iResolution = vec2(800*2, 600*2);
 
 uniform sampler2D screenTexture;
 const float offset = 1.0 / 1000;
 
 void main()
 {
-    //    color = vec4(vec3(1.0 - texture(screenTexture, TexCoords)), 1.0);
-//    color =texture(screenTexture, TexCoords);
-    //    color =vec4(0.0f,1.0f,1.0f,1.0f);
-    
+     // the original texture
+//    color = texture( screenTexture, TexCoords);
     
     
     //            vec4 sample0,sample1,sample2,sample3,sample4,sample5,sample6,sample7;
@@ -31,45 +73,76 @@ void main()
     //            color =  fcolor;
     
     
-    vec2 offsets[9] = vec2[](
-                             vec2(-offset, offset),  // top-left
-                             vec2(0.0f,    offset),  // top-center
-                             vec2(offset,  offset),  // top-right
-                             vec2(-offset, 0.0f),    // center-left
-                             vec2(0.0f,    0.0f),    // center-center
-                             vec2(offset,  0.0f),    // center-right
-                             vec2(-offset, -offset), // bottom-left
-                             vec2(0.0f,    -offset), // bottom-center
-                             vec2(offset,  -offset)  // bottom-right
-                             );
     
-    
-    
+    // the kernel texture
+//    vec2 offsets[9] = vec2[](
+//                             vec2(-offset, offset),  // top-left
+//                             vec2(0.0f,    offset),  // top-center
+//                             vec2(offset,  offset),  // top-right
+//                             vec2(-offset, 0.0f),    // center-left
+//                             vec2(0.0f,    0.0f),    // center-center
+//                             vec2(offset,  0.0f),    // center-right
+//                             vec2(-offset, -offset), // bottom-left
+//                             vec2(0.0f,    -offset), // bottom-center
+//                             vec2(offset,  -offset)  // bottom-right
+//                             );
+//    
+//    float kernel[9] = float[](
+//                              1, 1, 1,
+//                              1, 8, 1,
+//                              1, 1, 1
+//                              );
+//    
+//    vec4 sampleTex[9];
+//    for(int i = 0; i < 9; i++)
+//    {
+//        sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
+//    }
+//    
+//    vec3 col = vec3(0.0);
+//    for(int i = 0; i < 9; i++)
+//        col += vec3(sampleTex[i]) * kernel[i];
+//    
+//    col = col/9;
+//    color = vec4(col, 1.0);
 
     
-    float kernel[9] = float[](
-                              1, 1, 1,
-                              1, 7, 1,
-                              1, 1, 1
-                              );
     
-
     
-    vec4 sampleTex[9];
-    for(int i = 0; i < 9; i++)
+    //median
+    vec2 ooRes = vec2(1.) / iResolution.xy;
+    
+    //SORT_SIZE个列
+    for (int j=0; j<SORT_SIZE; j++)
     {
-        sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
+        //SORT_SIZE个行
+        for (int i=0; i<SORT_SIZE; i++)
+        {
+            vec2 uv = (gl_FragCoord.xy + vec2(i,j)-vec2(SORT_SIZE/2)) * ooRes;
+            float c = pack( texture(screenTexture,uv).rgb );
+            
+            sort[i] = c;
+        }
+        // 针对某列进行纵向排序
+        bubble_sort( SORT_SIZE);
+        
+        //保存该列的中值
+        float m = sort[(SORT_SIZE/2)];
+        
+        medians[j] = m;
     }
     
+    for (int i=0; i<SORT_SIZE; i++)
+    {
+        sort[i] = medians[i];
+    }
+    //对上一步 SORT_SIZE个列中值 进行横向排序
+    bubble_sort( SORT_SIZE);
+    // 提取中值
+    color = vec4(unpack(sort[SORT_SIZE/2]),1.0);
     
     
-    vec3 col = vec3(0.0);
-    for(int i = 0; i < 9; i++)
-        col += vec3(sampleTex[i]) * kernel[i];
     
-    col = col/9;
-    color = vec4(col, 1.0);
-
     
     
     

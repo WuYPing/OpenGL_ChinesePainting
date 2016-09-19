@@ -113,9 +113,6 @@ int main()
     //NORMAL SHADER
     Shader normalShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.frag","/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.gs");
     
-    //TRIII SHADER
-    //    Shader normalShader("/Users/apple/Documents/OPENGL/ModelTest/model_line.vs", "/Users/apple/Documents/OPENGL/ModelTest/model_line.frag","/Users/apple/Documents/OPENGL/ModelTest/model_line.gs");
-    
     //DEPTH SHADER
     Shader depthShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.frag");
     
@@ -165,7 +162,7 @@ int main()
     
     //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/PENRU.obj");
     
-    //        Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
+//            Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
@@ -196,9 +193,7 @@ int main()
     glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     depthShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    
-//    frameShader.Use();
-//    glUniformMatrix4fv(glGetUniformLocation(frameShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
     
     
     
@@ -305,11 +300,6 @@ int main()
     
     //generate the texcoordoffsets and send to fragment
     //    genTexCoordOffsets(screenWidth, screenHeight, 1.0f);
-    
-    
-    
-    
-    
     
     
     
