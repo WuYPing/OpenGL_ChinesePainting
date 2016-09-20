@@ -61,6 +61,9 @@ const GLint tcOffsetRows    = 5;
 GLfloat	texCoordOffsets[tcOffsetColumns * tcOffsetRows * 2];
 
 
+// Light attributes
+glm::vec3 lightPos(-1.2f, -1.0f, -2.0f);
+
 
 // The MAIN function, from here we start our application and run our Game loop
 int main()
@@ -108,7 +111,7 @@ int main()
     
     
     //SHOW SHADER
-    Shader shader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.frag","/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.gs");
+    Shader shader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.frag");
     
     //NORMAL SHADER
     Shader normalShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.frag","/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.gs");
@@ -162,13 +165,13 @@ int main()
     
     //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/PENRU.obj");
     
-//            Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
+    //            Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
-    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
+    //            Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
     Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
     
@@ -193,7 +196,7 @@ int main()
     glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     depthShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
+    
     
     
     
@@ -246,7 +249,7 @@ int main()
     
     
     //    // Configure depth map FBO
-
+    
     
     GLuint depthMapFBO;
     glGenFramebuffers(1, &depthMapFBO);
@@ -306,7 +309,26 @@ int main()
     
     
     
-    
+    //for the noise texture
+    GLuint noiseTex;
+    // ====================
+    // Texture 1
+    // ====================
+    glGenTextures(1, &noiseTex);
+    glBindTexture(GL_TEXTURE_2D, noiseTex); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+    // Set our texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Set texture filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Load, create texture and generate mipmaps
+    int width2, height2;
+    unsigned char* image2 = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/noise.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    SOIL_free_image_data(image2);
+    glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
     
     
     
@@ -363,13 +385,13 @@ int main()
         glEnable(GL_DEPTH_TEST);
         
         
-      
+        
         
         
         
         
         // 1 RENDER THE DEPTH BUFFER
-          glViewport(0, 0, screenWidth, screenHeight);
+        glViewport(0, 0, screenWidth, screenHeight);
         
         
         GLfloat near_plane = 0.3f, far_plane = 7.5f;
@@ -449,19 +471,27 @@ int main()
         
         
         // 3 DRAW THE INTERIOR
-                shader.Use();   // <-- Don't forget this one!
+        shader.Use();   // <-- Don't forget this one!
         
-                model = glm::mat4();
-                model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
-                model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
+        model = glm::mat4();
+        model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
         
-                glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-                // Transformation matrices
-                glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-                glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-                // Add time component to geometry shader in the form of a uniform
-                glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
-//                ourModel.Draw(shader);
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        // Transformation matrices
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        // Add time component to geometry shader in the form of a uniform
+        glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
+        
+        //for the light effect
+        GLint objectColorLoc = glGetUniformLocation(shader.Program, "objectColor");
+        GLint lightColorLoc  = glGetUniformLocation(shader.Program, "lightColor");
+        GLint lightPosLoc    = glGetUniformLocation(shader.Program, "lightPos");
+        glUniform3f(objectColorLoc, 1.0f, 1.0f, 1.0f);
+        glUniform3f(lightColorLoc,  1.0f, 1.0f, 1.0f);
+        glUniform3f(lightPosLoc,    lightPos.x, lightPos.y, lightPos.z);
+        ourModel.Draw(shader);
         
         
         
@@ -492,9 +522,23 @@ int main()
         frameShader.Use();
         glBindVertexArray(quadVAO);
         
+        
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
+        
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, noiseTex);
+        
+        glUniform1i(glGetUniformLocation(frameShader.Program, "noiseTexture"), 1);
+        
+        //for the light effect
+        GLint uQuantLevel = glGetUniformLocation(frameShader.Program, "uQuantLevel");
+        GLint uWaterPower  = glGetUniformLocation(frameShader.Program, "uWaterPower");
+        glUniform1f(uQuantLevel, 2.0f);
+        glUniform1f(uWaterPower, 8.0f);
+        
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
         

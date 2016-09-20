@@ -6,6 +6,7 @@ layout (location = 2) in vec2 texCoords;
 out VS_OUT {
     vec2 texCoords;
     vec3 normal;
+    vec3 FragPos;
 } vs_out;
 
 
@@ -28,5 +29,7 @@ void main()
     gl_Position = projection * view * model * vec4(position, 1.0f);
     
     vs_out.texCoords = texCoords;
+    
+    vs_out.FragPos = vec3(model * vec4(position, 1.0));
     
 }
