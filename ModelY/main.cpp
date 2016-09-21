@@ -122,6 +122,9 @@ int main()
     //FRAMEBUFFER SHADER
     Shader frameShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen.frag");
     
+    //FRAMEBUFFER SHADER2
+    Shader frameShader2("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen2.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen2.frag");
+    
     
     
     
@@ -246,6 +249,34 @@ int main()
     
     
     
+    // Framebuffers
+    GLuint framebuffer2;
+    glGenFramebuffers(1, &framebuffer2);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
+    // Create a color attachment texture
+    GLuint textureColorbuffer2;
+    glGenTextures(1, &textureColorbuffer2);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2, 0);
+    // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+    GLuint rbo2;
+    glGenRenderbuffers(1, &rbo2);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo2);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight); // Use a single renderbuffer object for both a depth AND stencil buffer.
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
+    // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    
     
     
     //    // Configure depth map FBO
@@ -368,13 +399,10 @@ int main()
         
         
         
+
         
-        
-        
-        
-        
-        
-        //        glReadBuffer(GL_FRONT_AND_BACK);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
+
         
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
@@ -423,6 +451,7 @@ int main()
         /////////////
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        
         
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
@@ -511,6 +540,10 @@ int main()
         
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
+        
         // Clear all relevant buffers
         glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
         glClear(GL_COLOR_BUFFER_BIT);
@@ -526,13 +559,11 @@ int main()
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
-        
         glActiveTexture(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, noiseTex);
         
         glUniform1i(glGetUniformLocation(frameShader.Program, "noiseTexture"), 1);
-        
         //for the light effect
         GLint uQuantLevel = glGetUniformLocation(frameShader.Program, "uQuantLevel");
         GLint uWaterPower  = glGetUniformLocation(frameShader.Program, "uWaterPower");
@@ -542,6 +573,31 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
         
+        
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        
+        
+        
+        
+        // Clear all relevant buffers
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
+        
+        glViewport(0, 0, screenWidth, screenHeight);
+        
+        // Draw Screen
+        frameShader2.Use();
+        glBindVertexArray(quadVAO);
+        
+        
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);	// Use the color attachment texture as the texture of the quad plane
+   
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
         
         
         // Swap the buffers
