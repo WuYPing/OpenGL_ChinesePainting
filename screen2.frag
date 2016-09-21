@@ -215,7 +215,7 @@ void main()
         col += vec3(sampleTex[i]) * kernel[i];
     col = col/12;
     vec4 ker_color = vec4(col, 1.0);
-    
+
     color = ker_color;
     
     

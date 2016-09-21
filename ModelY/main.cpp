@@ -520,7 +520,7 @@ int main()
         glUniform3f(objectColorLoc, 1.0f, 1.0f, 1.0f);
         glUniform3f(lightColorLoc,  1.0f, 1.0f, 1.0f);
         glUniform3f(lightPosLoc,    lightPos.x, lightPos.y, lightPos.z);
-        ourModel.Draw(shader);
+//        ourModel.Draw(shader);
         
         
         
@@ -559,6 +559,7 @@ int main()
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
+        
         glActiveTexture(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, noiseTex);

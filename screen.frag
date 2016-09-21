@@ -83,7 +83,9 @@ uniform sampler2D noiseTexture;
 uniform float uQuantLevel;   // 2-6
 uniform float uWaterPower;   // 8-64
 
-const vec2 texSize = vec2(256., 256.);
+
+//决定粒子颗粒大小 一部分
+const vec2 texSize = vec2(256, 256);
 
 vec2 vUV;
 
@@ -120,7 +122,9 @@ vec4 dip_fil(mat3 fil, vec2 fil_pos_delta[9],
 //// noise diffusion over
 ////
 ////
-
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
 
 
 void main()
@@ -150,6 +154,7 @@ void main()
                        1./8.,1./4.,1./8.,
                        1./16.,1./8.,1./16.);
     
+//    vUV = vec2(0., 0.);
     vec2 xy = vec2(vUV.x * texSize.x, vUV.y * texSize.y);
     
     vec4 fil_color = dip_fil(fil, fil_pos_delta,
@@ -265,16 +270,16 @@ void main()
     
     
     
-    //            float blurSizeH = 1.0 / 2000.0;
-    //            float blurSizeV = 1.0 / 2000.0;
-    //            vec4 sum = vec4(0.0);
-    //            for (int x = -4; x <= 4; x++)
-    //                for (int y = -4; y <= 4; y++)
-    //                    sum += texture(
-    //                                   screenTexture,
-    //                                   vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)
-    //                                   ) / 81.0;
-    //            color = sum;
+//                float blurSizeH = 1.0 / 2000.0;
+//                float blurSizeV = 1.0 / 2000.0;
+//                vec4 sum = vec4(0.0);
+//                for (int x = -4; x <= 4; x++)
+//                    for (int y = -4; y <= 4; y++)
+//                        sum += texture(
+//                                       screenTexture,
+//                                       vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)
+//                                       ) / 81.0;
+//                color = sum;
     
     
     
