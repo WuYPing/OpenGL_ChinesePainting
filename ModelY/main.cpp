@@ -582,7 +582,7 @@ int main()
         
         
         // Clear all relevant buffers
-        glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // Sert clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
         
