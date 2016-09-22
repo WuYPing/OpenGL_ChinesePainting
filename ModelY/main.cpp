@@ -481,23 +481,14 @@ int main()
         glUniform2fv(glGetUniformLocation(normalShader.Program, "tcOffset"),50, texCoordOffsets); // Pass in 25 vec2s in our texture coordinate offset array
         ourModel.Draw(normalShader);
         
+        
         glBindTexture(GL_TEXTURE_2D, 0);
         
-        
-        
-        
+ 
         
         //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         // 3 DRAW THE INTERIOR
         shader.Use();   // <-- Don't forget this one!
@@ -523,7 +514,7 @@ int main()
 //        ourModel.Draw(shader);
         
         
-        
+
         
         
         

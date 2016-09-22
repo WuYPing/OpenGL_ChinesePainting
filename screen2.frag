@@ -294,40 +294,40 @@ void main()
     
     
     // the kernel texture
-    //    vec2 offsets[9] = vec2[](
-    //                             vec2(-offset, offset),  // top-left
-    //                             vec2(0.0f,    offset),  // top-center
-    //                             vec2(offset,  offset),  // top-right
-    //                             vec2(-offset, 0.0f),    // center-left
-    //                             vec2(0.0f,    0.0f),    // center-center
-    //                             vec2(offset,  0.0f),    // center-right
-    //                             vec2(-offset, -offset), // bottom-left
-    //                             vec2(0.0f,    -offset), // bottom-center
-    //                             vec2(offset,  -offset)  // bottom-right
-    //                             );
-    //
-    //    float kernel[9] = float[](
-    //                              1, 1, 1,
-    //                              1, 8, 1,
-    //                              1, 1, 1
-    ////                              1./16., 1./8.,1./16.,
-    ////                              1./8.,1./4.,1./8.,
-    ////                              1./16.,1./8.,1./16.
-    //                              );
-    //
-    //    vec4 sampleTex[9];
-    //    for(int i = 0; i < 9; i++)
-    //    {
-    //        sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
-    //    }
-    //
-    //    vec3 col = vec3(0.0);
-    //    for(int i = 0; i < 9; i++)
-    //        col += vec3(sampleTex[i]) * kernel[i];
-    //    col = col/12;
-    //    vec4 ker_color = vec4(col, 1.0);
-    //
-    //    color = ker_color;
+//        vec2 offsets[9] = vec2[](
+//                                 vec2(-offset, offset),  // top-left
+//                                 vec2(0.0f,    offset),  // top-center
+//                                 vec2(offset,  offset),  // top-right
+//                                 vec2(-offset, 0.0f),    // center-left
+//                                 vec2(0.0f,    0.0f),    // center-center
+//                                 vec2(offset,  0.0f),    // center-right
+//                                 vec2(-offset, -offset), // bottom-left
+//                                 vec2(0.0f,    -offset), // bottom-center
+//                                 vec2(offset,  -offset)  // bottom-right
+//                                 );
+//    
+//        float kernel[9] = float[](
+//                                  1, 1, 1,
+//                                  1, 8, 1,
+//                                  1, 1, 1
+//    //                              1./16., 1./8.,1./16.,
+//    //                              1./8.,1./4.,1./8.,
+//    //                              1./16.,1./8.,1./16.
+//                                  );
+//    
+//        vec4 sampleTex[9];
+//        for(int i = 0; i < 9; i++)
+//        {
+//            sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
+//        }
+//    
+//        vec3 col = vec3(0.0);
+//        for(int i = 0; i < 9; i++)
+//            col += vec3(sampleTex[i]) * kernel[i];
+//        col = col/12;
+//        vec4 ker_color = vec4(col, 1.0);
+//    
+//        color = ker_color;
     
     
     
