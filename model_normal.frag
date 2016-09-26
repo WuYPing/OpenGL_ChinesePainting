@@ -62,6 +62,14 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 }
 
 
+vec2 newUV;
+
+//// randum thing
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+
 void main()
 {
     //    float depth = LinearizeDepth(gl_FragCoord.z);
@@ -163,9 +171,16 @@ void main()
         
         
         
-        
+//        newUV = vec2(1,1);
         //the original one
-        color = texture(ourTexture1, TexCoords);
+        //对于厚边两边的纹理 采取20%的概率舍弃？
+        if ( ((abs(vec2(TexCoords.xy).y - 0.5) - 0.2) > 0) && rand(newUV) > 0.4 )
+        {
+            discard;
+        } else {
+            color = texture(ourTexture1, TexCoords);
+        }
+        
     }else{
         discard;
     }

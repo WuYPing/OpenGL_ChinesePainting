@@ -170,9 +170,9 @@ int main()
     
     //            Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
-    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
+//            Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
+//        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
     //            Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     

@@ -74,23 +74,32 @@ void GenerateLine2(int a, int b)
     vec2 E = OverhangLength * (P1 - P0);
     vec2 V = normalize(P1 - P0);
     vec2 N = vec2(-V.y, V.x) * HalfWidth;
-    vec2 Na =  normalize(vec2(gs_in[a].normal.x,gs_in[a].normal.y))* HalfWidth* normalize(vec2(gs_in[a].position.xy)).y;
-    vec2 Nb =  normalize(vec2(gs_in[b].normal.x,gs_in[b].normal.y))* HalfWidth* normalize(vec2(gs_in[b].position.xy)).y;
+    
+    // a点的法向量 * 宽度(固定) * a点y方向(为了让宽度不一样,随着纹理的方向改变,结尾变细,用其－0.5的绝对值来表示头尾都细)
+    
+//    abs( normalize(vec2(gs_in[a].position.xy)).y - 0.8);
+    vec2 Na =  normalize(vec2(gs_in[a].normal.x,gs_in[a].normal.y)) * HalfWidth
+    * abs( normalize(vec2(gs_in[a].position.xy)).y + 0.);
+//    normalize(vec2(gs_in[a].position.xy)).y;
+    vec2 Nb =  normalize(vec2(gs_in[b].normal.x,gs_in[b].normal.y)) * HalfWidth
+    * abs( normalize(vec2(gs_in[b].position.xy)).y + 0.);
+//    normalize(vec2(gs_in[b].position.xy)).y;
     //    * normalize(vec2(gs_in[b].position.xy)).x
     
     gSpine = (P0 + 1.0) * 0.5;
     gDist = +HalfWidth;
     gl_Position = gl_in[a].gl_Position + vec4(- Na , 0, 0);
+
     
-    //    TexCoords = vec2(0.0f, 0.0f);
-    TexCoords = vec2(gs_in[a].position.xy);
+        TexCoords = vec2(0.0f, 0.0f);
+//    TexCoords = vec2(gs_in[a].position.xy) + vec2(- Na);
     EmitVertex();
     
     gDist = -HalfWidth;
     gl_Position = gl_in[a].gl_Position + vec4(+ Na , 0, 0);
     
-    //    TexCoords = vec2(0.0f, 1.0f);
-    TexCoords = vec2(gs_in[a].position.xy);
+        TexCoords = vec2(0.0f, 1.0f);
+//    TexCoords = vec2(gs_in[a].position.xy) + vec2(+ Na);
     EmitVertex();
     
     
@@ -98,16 +107,16 @@ void GenerateLine2(int a, int b)
     gDist = +HalfWidth;
     gl_Position = gl_in[b].gl_Position + vec4(- Nb , 0, 0);
     
-    //    TexCoords = vec2(1.0f, 0.0f);
-    TexCoords = vec2(gs_in[b].position.xy);
+        TexCoords = vec2(1.0f, 0.0f);
+//    TexCoords = vec2(gs_in[b].position.xy) + vec2(+ Nb);
     EmitVertex();
     
     
     gDist = -HalfWidth;
     gl_Position = gl_in[b].gl_Position + vec4(+ Nb , 0, 0);
     
-    //    TexCoords = vec2(1.0f, 1.0f);
-    TexCoords = vec2(gs_in[b].position.xy);
+        TexCoords = vec2(1.0f, 1.0f);
+//    TexCoords = vec2(gs_in[b].position.xy) + vec2(+ Nb);
     EmitVertex();
     EndPrimitive();
     
@@ -225,15 +234,15 @@ void main()
     
     
     //width one
-    if( N042.z * N021.z < 0. )
+    if( N042.z * N021.z < 0.00 )
     {
         GenerateLine2(0,2);
     }
-    if( N042.z * N243.z < 0. )
+    if( N042.z * N243.z < 0.00 )
     {
         GenerateLine2(2,4);
     }
-    if( N042.z * N405.z < 0. )
+    if( N042.z * N405.z < 0.00 )
     {
         GenerateLine2(4,0);
     }
