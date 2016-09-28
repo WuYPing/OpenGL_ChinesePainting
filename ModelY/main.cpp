@@ -62,7 +62,7 @@ GLfloat	texCoordOffsets[tcOffsetColumns * tcOffsetRows * 2];
 
 
 // Light attributes
-glm::vec3 lightPos(-1.2f, -1.0f, -2.0f);
+glm::vec3 lightPos(0.f, -5.f, 0.5f);
 
 
 // The MAIN function, from here we start our application and run our Game loop
@@ -170,9 +170,9 @@ int main()
     
     //            Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
-//            Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
+    //            Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
-//        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
     //            Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
@@ -332,7 +332,7 @@ int main()
     glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
     
     
-    //generate the texcoordoffsets and send to fragment
+    //generate the texcoord offsets and send to fragment
     //    genTexCoordOffsets(screenWidth, screenHeight, 1.0f);
     
     
@@ -399,16 +399,16 @@ int main()
         
         
         
-
+        
         
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
-
+        
         
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
         // Clear the colorbuffer
-        //                glClearColor(125.0/255,152.0/255,134.0/255,1.0f);
-        glClearColor(1.0f,1.0f,1.0f,1.0f);
+        //        glClearColor(125.0/255,125.0/255,124.0/255,1.0f);
+        glClearColor(1.f, 1.f, 1.f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         
@@ -484,11 +484,11 @@ int main()
         
         glBindTexture(GL_TEXTURE_2D, 0);
         
- 
+        
         
         //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         
-
+        
         
         // 3 DRAW THE INTERIOR
         shader.Use();   // <-- Don't forget this one!
@@ -497,12 +497,21 @@ int main()
         model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
         model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
         
+        
+        // Bind depth Textures
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+        //         Bind Textures using texture units
+        
+        
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         // Transformation matrices
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
         // Add time component to geometry shader in the form of a uniform
         glUniform1f(glGetUniformLocation(shader.Program, "time"), glfwGetTime());
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         
         //for the light effect
         GLint objectColorLoc = glGetUniformLocation(shader.Program, "objectColor");
@@ -511,10 +520,10 @@ int main()
         glUniform3f(objectColorLoc, 1.0f, 1.0f, 1.0f);
         glUniform3f(lightColorLoc,  1.0f, 1.0f, 1.0f);
         glUniform3f(lightPosLoc,    lightPos.x, lightPos.y, lightPos.z);
-//        ourModel.Draw(shader);
+        ourModel.Draw(shader);
         
         
-
+        
         
         
         
@@ -587,7 +596,7 @@ int main()
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureColorbuffer2);	// Use the color attachment texture as the texture of the quad plane
-   
+        
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
         

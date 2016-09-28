@@ -12,13 +12,13 @@
 		331D5B8A1D41E0F700A51372 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 331D5B891D41E0F700A51372 /* Images.xcassets */; };
 		331D5B8D1D41E0F700A51372 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 331D5B8B1D41E0F700A51372 /* Main.storyboard */; };
 		331D5B991D41E0F800A51372 /* ModelYTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 331D5B981D41E0F800A51372 /* ModelYTests.m */; };
-		331D5BA71D41E38600A51372 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 331D5BA31D41E38600A51372 /* main.cpp */; };
 		331D5BB61D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB01D41E3DF00A51372 /* libassimp.3.2.0.dylib */; };
 		331D5BB71D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB11D41E3DF00A51372 /* libassimp.3.2.0.dylib */; };
 		331D5BB81D41E3DF00A51372 /* libassimp.3.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB21D41E3DF00A51372 /* libassimp.3.2.0.dylib */; };
 		331D5BB91D41E3DF00A51372 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB31D41E3DF00A51372 /* libGLEW.a */; };
 		331D5BBA1D41E3DF00A51372 /* libGLEWmx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB41D41E3DF00A51372 /* libGLEWmx.a */; };
 		331D5BBB1D41E3DF00A51372 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 331D5BB51D41E3DF00A51372 /* libglfw3.a */; };
+		336B9C761D9BEFB9003973F8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 331D5BA31D41E38600A51372 /* main.cpp */; };
 		33C71D721D508F5B00CA1056 /* libSOIL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33C71D711D508F5B00CA1056 /* libSOIL.a */; };
 		33C71D771D508F8700CA1056 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 33C71D731D508F8700CA1056 /* image_DXT.c */; };
 		33C71D781D508F8700CA1056 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 33C71D741D508F8700CA1056 /* image_helper.c */; };
@@ -267,9 +267,9 @@
 				33C71D781D508F8700CA1056 /* image_helper.c in Sources */,
 				33C71D791D508F8700CA1056 /* SOIL.c in Sources */,
 				33C71D7A1D508F8700CA1056 /* stb_image_aug.c in Sources */,
+				336B9C761D9BEFB9003973F8 /* main.cpp in Sources */,
 				331D5B881D41E0F700A51372 /* ViewController.m in Sources */,
 				331D5B831D41E0F700A51372 /* AppDelegate.m in Sources */,
-				331D5BA71D41E38600A51372 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -163,7 +163,7 @@ float calEven(int a, int b, int c, int d) {
 void main()
 {
     // the original texture
-    color = texture( screenTexture, TexCoords);
+//    color = texture( screenTexture, TexCoords);
     
     
     
@@ -334,35 +334,35 @@ void main()
     
     
     //median fil
-    //    vec2 ooRes = vec2(1.) / iResolution.xy;
-    //    //SORT_SIZE个列
-    //        for (int j=0; j<SORT_SIZE; j++)
-    //        {
-    //            //SORT_SIZE个行
-    //            for (int i=0; i<SORT_SIZE; i++)
-    //            {
-    //                vec2 uv = (gl_FragCoord.xy + vec2(i,j)-vec2(SORT_SIZE/2)) * ooRes;
-    //                float c = pack( texture(screenTexture,uv).rgb );
-    //
-    //                sort[i] = c;
-    //            }
-    //            // 针对某列进行纵向排序
-    //            bubble_sort( SORT_SIZE);
-    //
-    //            //保存该列的中值
-    //            float m = sort[(SORT_SIZE/2)];
-    //
-    //            medians[j] = m;
-    //        }
-    //
-    //        for (int i=0; i<SORT_SIZE; i++)
-    //        {
-    //            sort[i] = medians[i];
-    //        }
-    //        //对上一步 SORT_SIZE个列中值 进行横向排序
-    //        bubble_sort( SORT_SIZE);
-    //        // 提取中值
-    //        color = vec4(unpack(sort[SORT_SIZE/2]),1.0);
+        vec2 ooRes = vec2(1.) / iResolution.xy;
+        //SORT_SIZE个列
+            for (int j=0; j<SORT_SIZE; j++)
+            {
+                //SORT_SIZE个行
+                for (int i=0; i<SORT_SIZE; i++)
+                {
+                    vec2 uv = (gl_FragCoord.xy + vec2(i,j)-vec2(SORT_SIZE/2)) * ooRes;
+                    float c = pack( texture(screenTexture,uv).rgb );
+    
+                    sort[i] = c;
+                }
+                // 针对某列进行纵向排序
+                bubble_sort( SORT_SIZE);
+    
+                //保存该列的中值
+                float m = sort[(SORT_SIZE/2)];
+    
+                medians[j] = m;
+            }
+    
+            for (int i=0; i<SORT_SIZE; i++)
+            {
+                sort[i] = medians[i];
+            }
+            //对上一步 SORT_SIZE个列中值 进行横向排序
+            bubble_sort( SORT_SIZE);
+            // 提取中值
+            color = vec4(unpack(sort[SORT_SIZE/2]),1.0);
     
     
     

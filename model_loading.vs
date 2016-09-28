@@ -7,6 +7,7 @@ out VS_OUT {
     vec2 texCoords;
     vec3 normal;
     vec3 FragPos;
+    vec4 fragPosLightSpace;
 } vs_out;
 
 
@@ -15,6 +16,7 @@ out vec3 vvvview;
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
+uniform mat4 lightSpaceMatrix;
 
 
 void main()
@@ -31,5 +33,7 @@ void main()
     vs_out.texCoords = texCoords;
     
     vs_out.FragPos = vec3(model * vec4(position, 1.0));
+    
+    vs_out.fragPosLightSpace = lightSpaceMatrix * vec4(vs_out.FragPos, 1.0);
     
 }
