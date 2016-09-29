@@ -182,7 +182,7 @@ void main()
             
             color = texture(ourTexture1, TexCoords);
         }
-        
+    
     }else{
         discard;
     }

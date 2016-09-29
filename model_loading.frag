@@ -30,6 +30,13 @@ float LinearizeDepth(float depth)
     return (2.0 * near) / (far + near - z * (far - near));
 }
 
+float pack(vec3 c)
+{
+    float lum = (c.x + c.y + c.z) * (1. / 3.);
+    
+    return lum;
+}
+
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -50,7 +57,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
         {
             float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
             shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
-        }    
+        }
     }
     shadow /= 9.0;
     return shadow;
@@ -91,39 +98,51 @@ void main()
     vec3 result = (ambient * 0.1 + diffuse) * objectColor;
     
     vec3 re_color;
+    vec3 re_result = result + vec3(120. / 255);
+    float result_f = pack(result);
     
-    if( result.x > 0.8 ){
+    if( result_f > 0.9 ){
         
-        re_color = vec3(1.0, 1.0, 1.0);
+        re_color = vec3(255. / 255) / 5 + re_result ;
+        //        re_color = vec3(255. / 255);
     }
     //diffusion
-    else if ( result.x > 0.75 && result.x <= 0.8){
-        re_color = result / 3 + vec3(1.0, 1.0, 1.0) / 2;
-    }
-    else if ( result.x > 0.55 && result.x <= 0.75){
-        re_color = vec3(0.7, 0.7, 0.7);
+    else if ( result_f > 0.75 && result_f <= 0.9){
         
+        re_color = vec3(255. / 255) / 5 + re_result;
+        //        re_color = vec3(0. / 255);
+    }
+    else if ( result_f > 0.55 && result_f <= 0.75){
+        
+        re_color = vec3(200. / 255) / 5 + re_result ;
+        //        re_color = vec3(255. / 255);
     }
     //diffusion
-    else if ( result.x > 0.5 && result.x <= 0.55){
-        re_color = result / 3 + vec3(0.7, 0.7, 0.7) / 2;
-    }
-    else if ( result.x > 0.25 && result.x <= 0.5){
-        re_color = vec3(0.4, 0.4, 0.4);
+    else if ( result_f > 0.5 && result_f <= 0.55){
         
+        re_color = vec3(179. / 255) / 5 + re_result;
+        //        re_color = vec3(0. / 255);
+    }
+    else if ( result_f > 0.25 && result_f <= 0.5){
+        
+        re_color = vec3(110. / 255) / 5 + re_result;
+        //        re_color = vec3(255. / 255);
     }
     //diffusion
-    else if ( result.x > 0.15 && result.x <= 0.25){
-        re_color = result / 3 + vec3(0.4, 0.4, 0.4) / 2;
+    else if ( result_f > 0.04 && result_f <= 0.25){
+        
+        re_color = vec3(80. / 255) / 5 + re_result;
+        //        re_color = vec3(0. / 255);
     }
     else {
-        re_color = vec3(0.0, 0.0, 0.0);
+        re_color = vec3(29. / 255) / 5 + re_result;
+        //        re_color = vec3(125. / 255);
     }
     
     
-    re_color = result * 2;
+//        re_color = result ;
     
-    color = vec4(re_color, 1.0f);
+    color = vec4(re_color, 1.0f) ;
     
     
     

@@ -125,6 +125,9 @@ int main()
     //FRAMEBUFFER SHADER2
     Shader frameShader2("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen2.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen2.frag");
     
+    //FRAMEBUFFER SHADER3 FOR INNER
+    Shader frameShader3("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen3_in.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen3_in.frag");
+    
     
     
     
@@ -270,11 +273,45 @@ int main()
     glBindRenderbuffer(GL_RENDERBUFFER, rbo2);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight); // Use a single renderbuffer object for both a depth AND stencil buffer.
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // Now actually attach it
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo2); // Now actually attach it
     // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    
+    
+    
+    
+    // Framebuffers
+    GLuint framebuffer3;
+    glGenFramebuffers(1, &framebuffer3);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer3);
+    // Create a color attachment texture
+    GLuint textureColorbuffer3;
+    glGenTextures(1, &textureColorbuffer3);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer3);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer2, 0);
+    // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+    GLuint rbo3;
+    glGenRenderbuffers(1, &rbo3);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo3);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, screenWidth, screenHeight); // Use a single renderbuffer object for both a depth AND stencil buffer.
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo3); // Now actually attach it
+    // Now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    
+    
     
     
     
@@ -325,7 +362,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // Load, create texture and generate mipmaps
     int width, height;
-    unsigned char* image = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke4.bmp", &width, &height, 0, SOIL_LOAD_RGB);
+    unsigned char* image = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke1.bmp", &width, &height, 0, SOIL_LOAD_RGB);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
@@ -405,6 +442,8 @@ int main()
         
         
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        
+        
         
         // Clear the colorbuffer
         //        glClearColor(125.0/255,125.0/255,124.0/255,1.0f);
@@ -486,7 +525,8 @@ int main()
         
         
         
-        //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        
         
         
         
@@ -539,6 +579,17 @@ int main()
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        //第一个窗口buffer
+        
+        
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         
         
@@ -581,6 +632,11 @@ int main()
         
         
         
+        
+        
+        
+        //第二个窗口buffer
+        
         // Clear all relevant buffers
         glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // Sert clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
         glClear(GL_COLOR_BUFFER_BIT);
@@ -599,6 +655,13 @@ int main()
         
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
+        
+        
+        
+        
+        
+        
+        
         
         
         // Swap the buffers
