@@ -100,47 +100,49 @@ void main()
     vec3 re_color;
     vec3 re_result = result + vec3(120. / 255);
     float result_f = pack(result);
+    int a1 = 3/2;
+    int a2 = 2;
+    
+    
     
     if( result_f > 0.9 ){
         
-        re_color = vec3(255. / 255) / 5 + re_result ;
-        //        re_color = vec3(255. / 255);
+        re_color = vec3(255. / 255) / a1 + re_result / a2 ;
+        
     }
-    //diffusion
     else if ( result_f > 0.75 && result_f <= 0.9){
         
-        re_color = vec3(255. / 255) / 5 + re_result;
-        //        re_color = vec3(0. / 255);
+        re_color = vec3(255. / 255) / a1 + re_result / a2 ;
+        
     }
     else if ( result_f > 0.55 && result_f <= 0.75){
         
-        re_color = vec3(200. / 255) / 5 + re_result ;
-        //        re_color = vec3(255. / 255);
+        re_color = vec3(200. / 255) / a1 + re_result / a2 ;
+        
     }
-    //diffusion
     else if ( result_f > 0.5 && result_f <= 0.55){
         
-        re_color = vec3(179. / 255) / 5 + re_result;
-        //        re_color = vec3(0. / 255);
+        re_color = vec3(179. / 255) / a1 + re_result / a2 ;
+        
     }
     else if ( result_f > 0.25 && result_f <= 0.5){
         
-        re_color = vec3(110. / 255) / 5 + re_result;
-        //        re_color = vec3(255. / 255);
+        re_color = vec3(110. / 255) / a1 + re_result / a2 ;
+        
     }
-    //diffusion
     else if ( result_f > 0.04 && result_f <= 0.25){
         
-        re_color = vec3(80. / 255) / 5 + re_result;
-        //        re_color = vec3(0. / 255);
+        re_color = vec3(80. / 255) / a1 + re_result / a2 ;
+        
     }
     else {
-        re_color = vec3(29. / 255) / 5 + re_result;
-        //        re_color = vec3(125. / 255);
+        
+        re_color = vec3(29. / 255) / a1 + re_result / a2 ;
+        
     }
     
     
-//        re_color = result ;
+    //        re_color = result ;
     
     color = vec4(re_color, 1.0f) ;
     
