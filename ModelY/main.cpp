@@ -63,6 +63,7 @@ GLfloat	texCoordOffsets[tcOffsetColumns * tcOffsetRows * 2];
 
 // Light attributes
 glm::vec3 lightPos(0.f, -5.f, 0.5f);
+//glm::vec3 lightPos(0.f, 5.f, 5.f);
 
 
 // The MAIN function, from here we start our application and run our Game loop
@@ -111,23 +112,39 @@ int main()
     
     
     //SHOW SHADER
+    //动物内部颜色
     Shader shader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_loading.frag");
     
     //NORMAL SHADER
+    //动物边缘线着色
     Shader normalShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.frag","/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/model_normal.gs");
     
     //DEPTH SHADER
+    //深度贴图着色器
     Shader depthShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/shadow_mapping_depth.frag");
     
     //FRAMEBUFFER SHADER
+    //第一层 只用于内部着色的 做多用15*15模糊
     Shader frameShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen.frag");
     
     //FRAMEBUFFER SHADER2
+    //第二层 用于median filter 边缘
     Shader frameShader2("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen2.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen2.frag");
     
     //FRAMEBUFFER SHADER3 FOR INNER
+    //最后一层 外面的 稍微ker一下
     Shader frameShader3("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen3_in.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/screen3_in.frag");
     
+    
+    
+    
+    //SHOW SHADER
+    //地形内部颜色
+    Shader montshader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/mont_loading.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/mont_loading.frag");
+    
+    //NORMAL SHADER
+    //地形边缘线着色
+    Shader montnormalShader("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/mont_normal.vs", "/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/mont_normal.frag","/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/mont_normal.gs");
     
     
     
@@ -174,18 +191,24 @@ int main()
     
     //    Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
-//        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
-        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
+    //        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
-//    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/SPARROW.obj");
+//    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/sparrow.obj");
+    
+     Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/spr.obj");
+    
+    Model ourModel2("/Users/apple/Documents/maya/projects/default/scenes/mont.obj");
+    
+    Model ourModel3("/Users/apple/Documents/maya/projects/default/scenes/trr.obj");
     
     
-    
-    
-    
+    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/caml.obj");
+    //
+    //    Model ourModel2("/Users/apple/Documents/maya/projects/default/scenes/mont2.obj");
     
     
     
@@ -203,6 +226,8 @@ int main()
     glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     depthShader.Use();
     glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    montnormalShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     
     
     
@@ -215,6 +240,11 @@ int main()
     glUniform1i(glGetUniformLocation(normalShader.Program, "shadowMap"), 0);
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.Program, "shadowMap"), 0);
+    montnormalShader.Use();
+    glUniform1i(glGetUniformLocation(normalShader.Program, "shadowMap"), 0);
+    montshader.Use();
+    glUniform1i(glGetUniformLocation(normalShader.Program, "shadowMap"), 0);
+    
     
     
     
@@ -362,7 +392,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // Load, create texture and generate mipmaps
     int width, height;
-    unsigned char* image = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke1.bmp", &width, &height, 0, SOIL_LOAD_RGB);
+    unsigned char* image = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke4.bmp", &width, &height, 0, SOIL_LOAD_RGB);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     SOIL_free_image_data(image);
@@ -370,7 +400,38 @@ int main()
     
     
     // generate the texcoord offsets and send to fragment
-    //   genTexCoordOffsets(screenWidth, screenHeight, 1.0f);
+    
+    
+    
+    
+    
+    
+    
+    //LOAD THE STROKE PARTTTTTT
+    GLuint texture2;
+    // ====================
+    // Texture 1
+    // ====================
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+    // Set our texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Set texture filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Load, create texture and generate mipmaps
+    int width2, height2;
+    unsigned char* image2 = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/stroke1.bmp", &width2, &height2, 0, SOIL_LOAD_RGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2, 0, GL_RGB, GL_UNSIGNED_BYTE, image2);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    SOIL_free_image_data(image2);
+    glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
+    
+    
+    // generate the texcoord offsets and send to fragment
+    
+    
     
     
     
@@ -391,11 +452,11 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // Load, create texture and generate mipmaps
-    int width2, height2;
-    unsigned char* image2 = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/noise.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width2, height2, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    int width3, height3;
+    unsigned char* image3 = SOIL_load_image("/Users/apple/GitHub/OpenGL_Model_Outline/OpenGL_Model_Outline/strokes/noise.jpg", &width3, &height3, 0, SOIL_LOAD_RGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width3, height3, 0, GL_RGB, GL_UNSIGNED_BYTE, image3);
     glGenerateMipmap(GL_TEXTURE_2D);
-    SOIL_free_image_data(image2);
+    SOIL_free_image_data(image3);
     glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
     
     
@@ -525,6 +586,7 @@ int main()
         GLint lightColorLoc  = glGetUniformLocation(shader.Program, "lightColor");
         GLint lightPosLoc    = glGetUniformLocation(shader.Program, "lightPos");
         glUniform3f(objectColorLoc, 1.0f, 1.0f, 1.0f);
+        //           glUniform3f(objectColorLoc, 0.5f, 0.5f, 0.5f);
         glUniform3f(lightColorLoc,  1.0f, 1.0f, 1.0f);
         glUniform3f(lightPosLoc,    lightPos.x, lightPos.y, lightPos.z);
         ourModel.Draw(shader);
@@ -534,9 +596,106 @@ int main()
         
         
         
+        ///
+        ///
+        /////////////////
+        ///////
+        ////////
         
         
-
+        ///////
+        
+        
+        /////////
+        
+        
+        
+        // 3 DRAW THE MOUNTAIN GROUND AND SOMETHING
+        montnormalShader.Use();   // <-- Don't forget this one!
+        
+        glm::mat4 model2 = glm::mat4();
+        model2 = glm::translate(model2, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
+        model2 = glm::scale(model2, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
+        
+        
+        
+        
+        // Bind depth Textures
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+        //         Bind Textures using texture units
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        
+        glUniformMatrix4fv(glGetUniformLocation(montnormalShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
+        glUniformMatrix4fv(glGetUniformLocation(montnormalShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model2));
+        glUniformMatrix4fv(glGetUniformLocation(montnormalShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+        glUniform1i(glGetUniformLocation(montnormalShader.Program, "ourTexture1"), 1);
+        glUniform2fv(glGetUniformLocation(montnormalShader.Program, "tcOffset"),50, texCoordOffsets); // Pass in 25 vec2s in our texture coordinate offset array
+        ourModel3.Draw(montnormalShader);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        montshader.Use();   // <-- Don't forget this one!
+        
+        model = glm::mat4();
+        model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // Translate it down a bit so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// It's a bit too big for our scene, so scale it down
+        
+        
+        // Bind depth Textures
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+        //         Bind Textures using texture units
+        
+        
+        glUniformMatrix4fv(glGetUniformLocation(montshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        // Transformation matrices
+        glUniformMatrix4fv(glGetUniformLocation(montshader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(montshader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        // Add time component to geometry shader in the form of a uniform
+        glUniform1f(glGetUniformLocation(montshader.Program, "time"), glfwGetTime());
+        glUniformMatrix4fv(glGetUniformLocation(montshader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+        
+        //for the light effect
+        objectColorLoc = glGetUniformLocation(montshader.Program, "objectColor");
+        lightColorLoc  = glGetUniformLocation(montshader.Program, "lightColor");
+        lightPosLoc    = glGetUniformLocation(montshader.Program, "lightPos");
+        glUniform3f(objectColorLoc, 1.0f, 1.0f, 1.0f);
+        //           glUniform3f(objectColorLoc, 0.5f, 0.5f, 0.5f);
+        glUniform3f(lightColorLoc,  1.0f, 1.0f, 1.0f);
+        glUniform3f(lightPosLoc,    0.0f, 1.0f, 1.0f);
+        ourModel2.Draw(montshader);
+        
+        
+        
+        ///
+        ///
+        /////////////////
+        ///////
+        ////////
+        
+        
+        
+        
+        
+        /////////
+        
+        
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         
@@ -575,22 +734,22 @@ int main()
         
         
         
-     
-        
-      
         
         
         
-      
         
         
-    
+        
+        
+        
+        
+        
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
         
         
-         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer2);
         
         
         // 4 FRAMEBUFFER USING
@@ -598,7 +757,7 @@ int main()
         // Bind to default framebuffer again and draw the
         // quad plane with attched screen texture.
         // //////////////////////////////////////////////////
-                //第一个窗口buffer
+        //第一个窗口buffer
         
         
         
@@ -626,9 +785,9 @@ int main()
         glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
         glUniform2fv(glGetUniformLocation(normalShader.Program, "tcOffset"),50, texCoordOffsets); // Pass in 25 vec2s in our texture coordinate offset array
         ourModel.Draw(normalShader);
-
         
-       
+        
+        
         
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -665,7 +824,7 @@ int main()
         
         
         
-//        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         //
         //
         //        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer3);

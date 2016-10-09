@@ -1,8 +1,7 @@
 #version 330 core
 
 
-#define SORT_SIZE  7
-
+#define SORT_SIZE  8
 
 
 ////
