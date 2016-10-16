@@ -197,9 +197,9 @@ int main()
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
-//    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/sparrow.obj");
+    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/sparrow.obj");
     
-     Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/spr.obj");
+    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/spr.obj");
     
     Model ourModel2("/Users/apple/Documents/maya/projects/default/scenes/mont.obj");
     
