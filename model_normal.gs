@@ -78,12 +78,12 @@ void GenerateLine2(int a, int b)
     // a点的法向量 * 宽度(固定) * a点y方向(为了让宽度不一样,随着纹理的方向改变,结尾变细,用其－0.5的绝对值来表示头尾都细)
     
 //    abs( normalize(vec2(gs_in[a].position.xy)).y - 0.8);
-    vec2 Na =  normalize(vec2(gs_in[a].normal.x,gs_in[a].normal.y)) * HalfWidth;
+    vec2 Na =  normalize(vec2(gs_in[a].normal.x,gs_in[a].normal.y)) * HalfWidth
 //    * abs( normalize(vec2(gs_in[a].position.xy)).y + 0.);
-//    normalize(vec2(gs_in[a].position.xy)).y;
-    vec2 Nb =  normalize(vec2(gs_in[b].normal.x,gs_in[b].normal.y)) * HalfWidth;
+    * normalize(vec2(gs_in[a].position.xy)).y;
+    vec2 Nb =  normalize(vec2(gs_in[b].normal.x,gs_in[b].normal.y)) * HalfWidth
 //    * abs( normalize(vec2(gs_in[b].position.xy)).y + 0.);
-//    normalize(vec2(gs_in[b].position.xy)).y;
+    * normalize(vec2(gs_in[b].position.xy)).y;
     //    * normalize(vec2(gs_in[b].position.xy)).x
     
     gSpine = (P0 + 1.0) * 0.5;

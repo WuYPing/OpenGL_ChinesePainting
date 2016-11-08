@@ -52,6 +52,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     projCoords = projCoords * 0.5 + 0.5;
     // 取得最近点的深度(使用[0,1]范围下的fragPosLight当坐标)
     float closestDepth = texture(shadowMap, projCoords.xy).r;
+    
     // 取得当前片元在光源视角下的深度
     float currentDepth = projCoords.z;
     // 检查当前片元是否在阴影中
@@ -64,7 +65,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 vec2 newUV;
 
-//// randum thing
+//// random thing
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
@@ -171,7 +172,7 @@ void main()
         
         
         
-//        newUV = vec2(1,1);
+        //        newUV = vec2(1,1);
         //the original one
         //对于厚边两边的纹理 采取60%的概率舍弃？
         
@@ -179,10 +180,9 @@ void main()
         {
             discard;
         } else {
-            
             color = texture(ourTexture1, TexCoords);
         }
-    
+        
     }else{
         discard;
     }

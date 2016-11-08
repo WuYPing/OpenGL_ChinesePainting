@@ -5,11 +5,15 @@ layout (triangle_strip, max_vertices = 3) out;
 in VS_OUT {
     vec2 texCoords;
     vec3 normal;
+    vec3 FragPos;
+    vec4 fragPosLightSpace;
 } gs_in[];
 
 out VS_OUT {
     vec2 texCoords;
     vec3 normal;
+    vec3 FragPos;
+    vec4 fragPosLightSpace;
 } vs_out;
 
 out vec2 TexCoords;
@@ -49,8 +53,11 @@ vec3 GetNormal()
 
 void main() {
     
-    vs_out.texCoords = gs_in[0].texCoords;
-    vs_out.normal = GetNormal();
+    vs_out.texCoords = (gs_in[0].texCoords + gs_in[2].texCoords + gs_in[4].texCoords)/3;
+    vs_out.normal = (gs_in[0].normal + gs_in[2].normal + gs_in[4].normal)/3;
+    vs_out.FragPos = (gs_in[0].FragPos + gs_in[2].FragPos + gs_in[4].FragPos)/3;
+    vs_out.fragPosLightSpace = (gs_in[0].fragPosLightSpace + gs_in[2].fragPosLightSpace + gs_in[4].fragPosLightSpace)/3;
+    
     vec3 normal = GetNormal();
     
     

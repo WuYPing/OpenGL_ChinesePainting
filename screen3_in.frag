@@ -206,7 +206,7 @@ float calEven(int a, int b, int c, int d) {
 void main()
 {
     // the original texture
-//    color = texture( screenTexture, TexCoords);
+        color = texture( screenTexture, TexCoords);
     
     
     
@@ -335,98 +335,102 @@ void main()
     
     
     // the kernel texture
-//    vec2 offsets[9] = vec2[](
-//                             vec2(-offset, offset),  // top-left
-//                             vec2(0.0f,    offset),  // top-center
-//                             vec2(offset,  offset),  // top-right
-//                             vec2(-offset, 0.0f),    // center-left
-//                             vec2(0.0f,    0.0f),    // center-center
-//                             vec2(offset,  0.0f),    // center-right
-//                             vec2(-offset, -offset), // bottom-left
-//                             vec2(0.0f,    -offset), // bottom-center
-//                             vec2(offset,  -offset)  // bottom-right
-//                             );
-//    
-//    float kernel[9] = float[](
-//                              1, 1, 1,
-//                              1, 8, 1,
-//                              1, 1, 1
-//                              //                                      1./16., 1./8.,1./16.,
-//                              //                                      1./8.,1./4.,1./8.,
-//                              //                                      1./16.,1./8.,1./16.
-//                              );
-//    
-//    vec4 sampleTex[9];
-//    for(int i = 0; i < 9; i++)
-//    {
-//        sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
-//    }
-//    
-//    vec3 col = vec3(0.0);
-//    for(int i = 0; i < 9; i++)
-//        col += vec3(sampleTex[i]) * kernel[i];
-//    col = col/12;
-//    vec4 ker_color = vec4(col, 1.0);
-//    
-//    color = ker_color;
+    //        vec2 offsets[9] = vec2[](
+    //                                 vec2(-offset, offset),  // top-left
+    //                                 vec2(0.0f,    offset),  // top-center
+    //                                 vec2(offset,  offset),  // top-right
+    //                                 vec2(-offset, 0.0f),    // center-left
+    //                                 vec2(0.0f,    0.0f),    // center-center
+    //                                 vec2(offset,  0.0f),    // center-right
+    //                                 vec2(-offset, -offset), // bottom-left
+    //                                 vec2(0.0f,    -offset), // bottom-center
+    //                                 vec2(offset,  -offset)  // bottom-right
+    //                                 );
+    //
+    //        float kernel[9] = float[](
+    //                                  1, 1, 1,
+    //                                  1, 8, 1,
+    //                                  1, 1, 1
+    //                                  //                                      1./16., 1./8.,1./16.,
+    //                                  //                                      1./8.,1./4.,1./8.,
+    //                                  //                                      1./16.,1./8.,1./16.
+    //                                  );
+    //
+    //        vec4 sampleTex[9];
+    //        for(int i = 0; i < 9; i++)
+    //        {
+    //            sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
+    //        }
+    //
+    //        vec3 col = vec3(0.0);
+    //        for(int i = 0; i < 9; i++)
+    //            col += vec3(sampleTex[i]) * kernel[i];
+    //        col = col/12;
+    //        vec4 ker_color = vec4(col, 1.0);
+    //
+    //        color = ker_color;
     
     
     
     
-    //median fil
-            vec2 ooRes = vec2(1.) / iResolution.xy;
-            //SORT_SIZE个列
-                for (int j=0; j<SORT_SIZE; j++)
-                {
-                    //SORT_SIZE个行
-                    for (int i=0; i<SORT_SIZE; i++)
-                    {
-                        vec2 uv = (gl_FragCoord.xy + vec2(i,j)-vec2(SORT_SIZE/2)) * ooRes;
-                        float c = pack( texture(screenTexture,uv).rgb );
-    
-                        sort[i] = c;
-                    }
-                    // 针对某列进行纵向排序
-                    bubble_sort( SORT_SIZE);
-    
-                    //保存该列的中值
-                    float m = sort[(SORT_SIZE/2)];
-    
-                    medians[j] = m;
-                }
-    
-                for (int i=0; i<SORT_SIZE; i++)
-                {
-                    sort[i] = medians[i];
-                }
-                //对上一步 SORT_SIZE个列中值 进行横向排序
-                bubble_sort( SORT_SIZE);
-                // 提取中值
-                color = vec4(unpack(sort[SORT_SIZE/2]),1.0);
-    
-    
-    
-    
-    
-    //    color = (vec4(col, 1.0) + vec4(unpack(sort[SORT_SIZE/2]),1.0))/2;
-    
-    
-    
+    /*
+     
+     median filter
+     
+     */
+    //        vec2 ooRes = vec2(1.) / iResolution.xy;
+    //        //SORT_SIZE个列
+    //        for (int j=0; j<SORT_SIZE; j++)
+    //        {
+    //            //SORT_SIZE个行
+    //            for (int i=0; i<SORT_SIZE; i++)
+    //            {
+    //                vec2 uv = (gl_FragCoord.xy + vec2(i,j)-vec2(SORT_SIZE/2)) * ooRes;
+    //                float c = pack( texture(screenTexture,uv).rgb );
+    //
+    //                sort[i] = c;
+    //            }
+    //            // 针对某列进行纵向排序
+    //            bubble_sort( SORT_SIZE);
+    //
+    //            //保存该列的中值
+    //            float m = sort[(SORT_SIZE/2)];
+    //
+    //            medians[j] = m;
+    //        }
+    //
+    //        for (int i=0; i<SORT_SIZE; i++)
+    //        {
+    //            sort[i] = medians[i];
+    //        }
+    //        //对上一步 SORT_SIZE个列中值 进行横向排序
+    //        bubble_sort( SORT_SIZE);
+    //        //     提取中值
+    //        color = vec4(unpack(sort[SORT_SIZE/2]),1.0);
     
     
     
     
     
-    //                        float blurSizeH = 1.0 / 5000.0;
-    //                        float blurSizeV = 1.0 / 5000.0;
-    //                        vec4 sum = vec4(0.0);
-    //                        for (int x = -4; x <= 4; x++)
-    //                            for (int y = -4; y <= 4; y++)
-    //                                sum += texture(
-    //                                               screenTexture,
-    //                                               vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)
-    //                                               ) / 81.0;
-    //                        color = sum;
+    //        color = (vec4(col, 1.0) + vec4(unpack(sort[SORT_SIZE/2]),1.0))/2;
+    
+    
+    
+    
+    
+    
+    
+    
+    float blurSizeH = 1.0 / 2000.0;
+    float blurSizeV = 1.0 / 2000.0;
+    vec4 sum = vec4(0.0);
+    for (int x = -4; x <= 4; x++)
+        for (int y = -4; y <= 4; y++)
+            sum += texture(
+                           screenTexture,
+                           vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)
+                           ) / 81.0;
+//    color = sum;
     
     
     
@@ -466,9 +470,9 @@ void main()
     //
     //
     //    mm = mm / SORT_SIZE;
-    //
+    //    
     //    // 提取中值
-    //    color = vec4(unpack(mm),1.0);
+    //        color = vec4(unpack(mm),1.0);
     
     
     
