@@ -690,7 +690,7 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
         glUniform2fv(glGetUniformLocation(normalShader.Program, "tcOffset"),50, texCoordOffsets); // Pass in 25 vec2s in our texture coordinate offset array
-//        ourModel.Draw(normalShader);
+        ourModel.Draw(normalShader);
 
         
         

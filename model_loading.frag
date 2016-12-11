@@ -247,7 +247,7 @@ void main()
         
     }
     
-//    re_color = result * 2;
+    re_color = result * 2;
     
     
     color = vec4(re_color * 0.8, 1.0f);
