@@ -202,9 +202,9 @@ int main()
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
-//        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/sparrow2.obj");
+        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/sparrow.obj");
     
-    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/spr.obj");
+//    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/spr.obj");
     
 //    Model ourModel2("/Users/apple/Documents/maya/projects/default/scenes/mont.obj");
 //    
@@ -745,6 +745,25 @@ int main()
         frameShader3.Use();
         glBindVertexArray(quadVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+        
+        
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, noiseTex);
+         xx = random(100);
+        glUniform1i(glGetUniformLocation(frameShader3.Program, "noiseTexture"), 1);
+        glUniform1f(glGetUniformLocation(frameShader3.Program, "xxnumber"), xx);
+        //for the light effect
+         uQuantLevel = glGetUniformLocation(frameShader3.Program, "uQuantLevel");
+         uWaterPower  = glGetUniformLocation(frameShader3.Program, "uWaterPower");
+        glUniform1f(uQuantLevel, 6.0f);
+        glUniform1f(uWaterPower, 8.0f);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        
+        glBindVertexArray(0);
+
+        
+        
         glBindVertexArray(0);
         
         

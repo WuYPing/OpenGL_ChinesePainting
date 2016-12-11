@@ -252,7 +252,7 @@ void main()
      
      */
     
-//         color = texture( screenTexture, TexCoords);
+    //         color = texture( screenTexture, TexCoords);
     
     
     
@@ -266,9 +266,9 @@ void main()
     vec2 newUV2 = vec2(TexCoords.x + noiseColor.x / texSize.x / 10, TexCoords.y + noiseColor.y / texSize.y / 10);
     vec4 fColor = texture(screenTexture, newUV2);
     
-     color = quant(fColor, 255./pow(2., uQuantLevel));
+    //     color = quant(fColor, 255./pow(2., uQuantLevel));
     //vec4 color = vec4(1., 1., .5, 1.);
- 
+    
     
     
     
@@ -281,23 +281,23 @@ void main()
      perlin mess color
      
      */
-//    vec2 p = TexCoords.xy;
-//    
-//    vec2 uv = p * vec2(iResolution.x/iResolution.y,1.0);
-//    
-//    float f = 0.0;
-//    
-//    
-//    f = perlin_noise( 16.0 * uv);
-//    
-//    
-//    f = 0.5 + 0.5*f;
-//    
-//    // 分割线：注意如果第三个参数超过了限定范围就不进行插值
-//    f *= smoothstep(0.0, 0.005, abs(p.x-0.2));
-//    f *= smoothstep(0.0, 0.005, abs(p.x-0.4));
-//    f *= smoothstep(0.0, 0.005, abs(p.x-0.6));
-//    f *= smoothstep(0.0, 0.005, abs(p.x-0.8));
+    //    vec2 p = TexCoords.xy;
+    //
+    //    vec2 uv = p * vec2(iResolution.x/iResolution.y,1.0);
+    //
+    //    float f = 0.0;
+    //
+    //
+    //    f = perlin_noise( 16.0 * uv);
+    //
+    //
+    //    f = 0.5 + 0.5*f;
+    //
+    //    // 分割线：注意如果第三个参数超过了限定范围就不进行插值
+    //    f *= smoothstep(0.0, 0.005, abs(p.x-0.2));
+    //    f *= smoothstep(0.0, 0.005, abs(p.x-0.4));
+    //    f *= smoothstep(0.0, 0.005, abs(p.x-0.6));
+    //    f *= smoothstep(0.0, 0.005, abs(p.x-0.8));
     
     //    color = vec4( f, f, f, 1.0 );
     
@@ -319,61 +319,61 @@ void main()
      基本思想就是 将Kuwahara 的模板以目标像素为中心分成4块邻域，然后分别计算四块邻域的方差，取方差最小的邻域计算其平均值，得到的结果作为目标像素的新值。
      
      */
-//    vec2 offsets[9] = vec2[](
-//                             vec2(-offset, offset),  // top-left
-//                             vec2(0.0f,    offset),  // top-center
-//                             vec2(offset,  offset),  // top-right
-//                             vec2(-offset, 0.0f),    // center-left
-//                             vec2(0.0f,    0.0f),    // center-center
-//                             vec2(offset,  0.0f),    // center-right
-//                             vec2(-offset, -offset), // bottom-left
-//                             vec2(0.0f,    -offset), // bottom-center
-//                             vec2(offset,  -offset)  // bottom-right
-//                             );
-//    
-//    float kernel[9] = float[](
-//                              1, 1, 1,
-//                              1, 1, 1,
-//                              1, 1, 1
-//                              );
-//    
-//    
-//    for(int i = 0; i < 9; i++)
-//    {
-//        sampleGray[i] = pack(texture(screenTexture, TexCoords.st + offsets[i]).rgb);
-//    }
-//    
-//    
-//    preSamGary();
-//    
-//    f_rel[0] = calVari(0,1,3,4);
-//    f_rel[1] = calVari(1,2,4,5);
-//    f_rel[2] = calVari(3,4,6,7);
-//    f_rel[3] = calVari(4,5,7,8);
-//    
-//    int q = 0;
-//    
-//    float even;
-//    
-//    if ( q == 0) {
-//        
-//        even = calEven(0,1,3,4);
-//        
-//    } else if ( q == 1) {
-//        
-//        even = calEven(1,2,4,5);
-//        
-//    } else if ( q == 2) {
-//        
-//        even = calEven(3,4,6,7);
-//        
-//    } else if ( q == 3) {
-//        
-//        even = calEven(4,5,7,8);
-//        
-//    }
-//    
-//    color = vec4(unpack(even),1.0);
+    //    vec2 offsets[9] = vec2[](
+    //                             vec2(-offset, offset),  // top-left
+    //                             vec2(0.0f,    offset),  // top-center
+    //                             vec2(offset,  offset),  // top-right
+    //                             vec2(-offset, 0.0f),    // center-left
+    //                             vec2(0.0f,    0.0f),    // center-center
+    //                             vec2(offset,  0.0f),    // center-right
+    //                             vec2(-offset, -offset), // bottom-left
+    //                             vec2(0.0f,    -offset), // bottom-center
+    //                             vec2(offset,  -offset)  // bottom-right
+    //                             );
+    //
+    //    float kernel[9] = float[](
+    //                              1, 1, 1,
+    //                              1, 1, 1,
+    //                              1, 1, 1
+    //                              );
+    //
+    //
+    //    for(int i = 0; i < 9; i++)
+    //    {
+    //        sampleGray[i] = pack(texture(screenTexture, TexCoords.st + offsets[i]).rgb);
+    //    }
+    //
+    //
+    //    preSamGary();
+    //
+    //    f_rel[0] = calVari(0,1,3,4);
+    //    f_rel[1] = calVari(1,2,4,5);
+    //    f_rel[2] = calVari(3,4,6,7);
+    //    f_rel[3] = calVari(4,5,7,8);
+    //
+    //    int q = 0;
+    //
+    //    float even;
+    //
+    //    if ( q == 0) {
+    //
+    //        even = calEven(0,1,3,4);
+    //
+    //    } else if ( q == 1) {
+    //
+    //        even = calEven(1,2,4,5);
+    //
+    //    } else if ( q == 2) {
+    //
+    //        even = calEven(3,4,6,7);
+    //
+    //    } else if ( q == 3) {
+    //
+    //        even = calEven(4,5,7,8);
+    //
+    //    }
+    //
+    //    color = vec4(unpack(even),1.0);
     
     
     
@@ -527,16 +527,16 @@ void main()
     
     
     
-    //                        float blurSizeH = 1.0 / 5000.0;
-    //                        float blurSizeV = 1.0 / 5000.0;
-    //                        vec4 sum = vec4(0.0);
-    //                        for (int x = -4; x <= 4; x++)
-    //                            for (int y = -4; y <= 4; y++)
-    //                                sum += texture(
-    //                                               screenTexture,
-    //                                               vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)
-    //                                               ) / 81.0;
-    //                        color = sum;
+    float blurSizeH = 1.0 / 2000.0;
+    float blurSizeV = 1.0 / 2000.0;
+    vec4 sum = vec4(0.0);
+    for (int x = -4; x <= 4; x++)
+        for (int y = -4; y <= 4; y++)
+            sum += texture(
+                           screenTexture,
+                           vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)
+                           ) / 81.0;
+    color = sum;
     
     
     
@@ -579,7 +579,7 @@ void main()
     mm = mm / SORT_SIZE;
     
     // 提取中值
-//            color = vec4(unpack(mm),1.0);
+    //            color = vec4(unpack(mm),1.0);
     
     
     
