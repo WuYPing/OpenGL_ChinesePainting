@@ -15,7 +15,19 @@ const float offset = 1.0 / 500;
 in vec2 TexCoords;
 out vec4 color;
 
+uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 model;
+uniform vec3 lightPos;
+uniform vec3 lightColor;
+uniform vec3 objectColor;
 
+in VS_OUT {
+    vec2 texCoords;
+    vec3 normal;
+    vec3 FragPos;
+    vec4 fragPosLightSpace;
+} fs_in;
 
 /*
  
@@ -252,9 +264,22 @@ void main()
      
      */
     
-    //         color = texture( screenTexture, TexCoords);
+    //光源的位置 转换为窗口坐标
+    vec4 lpos = projection * view * model * vec4(lightPos, 1.0f);
     
+    vec2 dis = TexCoords.xy - lpos.xy;
     
+    float dists = dis.x * dis.x + dis.y * dis.y;
+//    
+//    if (dists >= .01)
+//    {
+//        color = vec4( 0.5);
+//    
+//    }
+//    else
+//    {
+         color = texture( screenTexture, TexCoords );
+ 
     
     /*
      
@@ -262,9 +287,9 @@ void main()
      
      */
     
-    vec4 noiseColor = uWaterPower * texture(noiseTexture, TexCoords);
-    vec2 newUV2 = vec2(TexCoords.x + noiseColor.x / texSize.x / 10, TexCoords.y + noiseColor.y / texSize.y / 10);
-    vec4 fColor = texture(screenTexture, newUV2);
+//    vec4 noiseColor = uWaterPower * texture(noiseTexture, TexCoords);
+//    vec2 newUV2 = vec2(TexCoords.x + noiseColor.x / texSize.x / 10, TexCoords.y + noiseColor.y / texSize.y / 10);
+//    vec4 fColor = texture(screenTexture, newUV2);
     
     //     color = quant(fColor, 255./pow(2., uQuantLevel));
     //vec4 color = vec4(1., 1., .5, 1.);
@@ -319,61 +344,61 @@ void main()
      基本思想就是 将Kuwahara 的模板以目标像素为中心分成4块邻域，然后分别计算四块邻域的方差，取方差最小的邻域计算其平均值，得到的结果作为目标像素的新值。
      
      */
-    //    vec2 offsets[9] = vec2[](
-    //                             vec2(-offset, offset),  // top-left
-    //                             vec2(0.0f,    offset),  // top-center
-    //                             vec2(offset,  offset),  // top-right
-    //                             vec2(-offset, 0.0f),    // center-left
-    //                             vec2(0.0f,    0.0f),    // center-center
-    //                             vec2(offset,  0.0f),    // center-right
-    //                             vec2(-offset, -offset), // bottom-left
-    //                             vec2(0.0f,    -offset), // bottom-center
-    //                             vec2(offset,  -offset)  // bottom-right
-    //                             );
-    //
-    //    float kernel[9] = float[](
-    //                              1, 1, 1,
-    //                              1, 1, 1,
-    //                              1, 1, 1
-    //                              );
-    //
-    //
-    //    for(int i = 0; i < 9; i++)
-    //    {
-    //        sampleGray[i] = pack(texture(screenTexture, TexCoords.st + offsets[i]).rgb);
-    //    }
-    //
-    //
-    //    preSamGary();
-    //
-    //    f_rel[0] = calVari(0,1,3,4);
-    //    f_rel[1] = calVari(1,2,4,5);
-    //    f_rel[2] = calVari(3,4,6,7);
-    //    f_rel[3] = calVari(4,5,7,8);
-    //
-    //    int q = 0;
-    //
-    //    float even;
-    //
-    //    if ( q == 0) {
-    //
-    //        even = calEven(0,1,3,4);
-    //
-    //    } else if ( q == 1) {
-    //
-    //        even = calEven(1,2,4,5);
-    //
-    //    } else if ( q == 2) {
-    //
-    //        even = calEven(3,4,6,7);
-    //
-    //    } else if ( q == 3) {
-    //
-    //        even = calEven(4,5,7,8);
-    //
-    //    }
-    //
-    //    color = vec4(unpack(even),1.0);
+//        vec2 offsets[9] = vec2[](
+//                                 vec2(-offset, offset),  // top-left
+//                                 vec2(0.0f,    offset),  // top-center
+//                                 vec2(offset,  offset),  // top-right
+//                                 vec2(-offset, 0.0f),    // center-left
+//                                 vec2(0.0f,    0.0f),    // center-center
+//                                 vec2(offset,  0.0f),    // center-right
+//                                 vec2(-offset, -offset), // bottom-left
+//                                 vec2(0.0f,    -offset), // bottom-center
+//                                 vec2(offset,  -offset)  // bottom-right
+//                                 );
+//    
+//        float kernel[9] = float[](
+//                                  1, 1, 1,
+//                                  1, 1, 1,
+//                                  1, 1, 1
+//                                  );
+//    
+//    
+//        for(int i = 0; i < 9; i++)
+//        {
+//            sampleGray[i] = pack(texture(screenTexture, TexCoords.st + offsets[i]).rgb);
+//        }
+//    
+//    
+//        preSamGary();
+//    
+//        f_rel[0] = calVari(0,1,3,4);
+//        f_rel[1] = calVari(1,2,4,5);
+//        f_rel[2] = calVari(3,4,6,7);
+//        f_rel[3] = calVari(4,5,7,8);
+//    
+//        int q = 0;
+//    
+//        float even;
+//    
+//        if ( q == 0) {
+//    
+//            even = calEven(0,1,3,4);
+//    
+//        } else if ( q == 1) {
+//    
+//            even = calEven(1,2,4,5);
+//    
+//        } else if ( q == 2) {
+//    
+//            even = calEven(3,4,6,7);
+//    
+//        } else if ( q == 3) {
+//    
+//            even = calEven(4,5,7,8);
+//    
+//        }
+//    
+//        color = vec4(unpack(even),1.0);
     
     
     
@@ -445,40 +470,40 @@ void main()
     
     
     // the kernel texture
-    //                    vec2 offsets[9] = vec2[](
-    //                                             vec2(-offset, offset),  // top-left
-    //                                             vec2(0.0f,    offset),  // top-center
-    //                                             vec2(offset,  offset),  // top-right
-    //                                             vec2(-offset, 0.0f),    // center-left
-    //                                             vec2(0.0f,    0.0f),    // center-center
-    //                                             vec2(offset,  0.0f),    // center-right
-    //                                             vec2(-offset, -offset), // bottom-left
-    //                                             vec2(0.0f,    -offset), // bottom-center
-    //                                             vec2(offset,  -offset)  // bottom-right
-    //                                             );
-    //
-    //                    float kernel[9] = float[](
-    //                                              1, 1, 1,
-    //                                              1, 8, 1,
-    //                                              1, 1, 1
-    ////                                              1./16., 1./8.,1./16.,
-    ////                                              1./8.,1./4.,1./8.,
-    ////                                              1./16.,1./8.,1./16.
-    //                                              );
-    //
-    //                    vec4 sampleTex[9];
-    //                    for(int i = 0; i < 9; i++)
-    //                    {
-    //                        sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
-    //                    }
-    //
-    //                    vec3 col = vec3(0.0);
-    //                    for(int i = 0; i < 9; i++)
-    //                        col += vec3(sampleTex[i]) * kernel[i];
-    //                    col = col/12;
-    //                    vec4 ker_color = vec4(col, 1.0);
-    //
-    //                    color = ker_color;
+                        vec2 offsets[9] = vec2[](
+                                                 vec2(-offset, offset),  // top-left
+                                                 vec2(0.0f,    offset),  // top-center
+                                                 vec2(offset,  offset),  // top-right
+                                                 vec2(-offset, 0.0f),    // center-left
+                                                 vec2(0.0f,    0.0f),    // center-center
+                                                 vec2(offset,  0.0f),    // center-right
+                                                 vec2(-offset, -offset), // bottom-left
+                                                 vec2(0.0f,    -offset), // bottom-center
+                                                 vec2(offset,  -offset)  // bottom-right
+                                                 );
+    
+                        float kernel[9] = float[](
+                                                  1, 1, 1,
+                                                  1, 8, 1,
+                                                  1, 1, 1
+    //                                              1./16., 1./8.,1./16.,
+    //                                              1./8.,1./4.,1./8.,
+    //                                              1./16.,1./8.,1./16.
+                                                  );
+    
+                        vec4 sampleTex[9];
+                        for(int i = 0; i < 9; i++)
+                        {
+                            sampleTex[i] = texture(screenTexture, TexCoords.st + offsets[i]);
+                        }
+    
+                        vec3 col = vec3(0.0);
+                        for(int i = 0; i < 9; i++)
+                            col += vec3(sampleTex[i]) * kernel[i];
+                        col = col/12;
+                        vec4 ker_color = vec4(col, 1.0);
+    
+//                        color = ker_color;
     
     
     
@@ -536,7 +561,7 @@ void main()
                            screenTexture,
                            vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)
                            ) / 81.0;
-    color = sum;
+//    color = sum;
     
     
     

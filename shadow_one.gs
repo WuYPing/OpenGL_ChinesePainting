@@ -60,9 +60,8 @@ void main() {
     vs_out.fragPosLightSpace = (gs_in[0].fragPosLightSpace + gs_in[2].fragPosLightSpace + gs_in[4].fragPosLightSpace)/3;
     
     vec3 normal = GetNormal();
-     texCoords = TexCoords;
-    
-
+    texCoords = TexCoords;
+  
     gl_Position = explode(gl_in[0].gl_Position);
 //    TexCoords = gs_in[0].texCoords;
     EmitVertex();
@@ -73,7 +72,7 @@ void main() {
 //    TexCoords = gs_in[4].texCoords;
     EmitVertex();
     
-   
+    
     EndPrimitive();
 
 }

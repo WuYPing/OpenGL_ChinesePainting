@@ -158,10 +158,9 @@ void main()
     vs_out.fragPosLightSpace = gs_in[0].fragPosLightSpace;
     vs_out.TexCoord = gs_in[0].TexCoord;
     TexCoords = gs_in[0].TexCoord;
+    
     //        GenerateLine(1,0);
-    
     //    GenerateTri(2,0,4); // First vertex normal
-    
     //    //现在唯一有那么一点用可以画出轮廓线的方法。。。可是并不好啊
     //        vec3 normal1 = GetNormalHere(1,2,0);
     //        vec3 viewf = normalize(vec3(viewp));
@@ -171,8 +170,6 @@ void main()
     //            GenerateLine(1,0);
     //            GenerateLine(1,2);
     //        }
-    
-    
     
     
     ////////////////////////////////////
@@ -196,7 +193,6 @@ void main()
     //        }
     
     
-    
     vec3 V0 = gl_in[0].gl_Position.xyz;
     vec3 V1 = gl_in[1].gl_Position.xyz;
     vec3 V2 = gl_in[2].gl_Position.xyz;
@@ -210,12 +206,12 @@ void main()
     
     
     //make the self edge dissappear
-    //    if( dot( N042, N021 ) < 0. )
-    //        N021 = vec3(0.,0.,0.) - N021;
-    //    if( dot( N042, N243 ) < 0. )
-    //        N243 = vec3(0.,0.,0.) - N243;
-    //    if( dot( N042, N405 ) < 0. )
-    //        N405 = vec3(0.,0.,0.) - N405;
+//        if( dot( N042, N021 ) < 0. )
+//            N021 = vec3(0.,0.,0.) - N021;
+//        if( dot( N042, N243 ) < 0. )
+//            N243 = vec3(0.,0.,0.) - N243;
+//        if( dot( N042, N405 ) < 0. )
+//            N405 = vec3(0.,0.,0.) - N405;
     
     
     //z just like the self view point
@@ -234,6 +230,7 @@ void main()
     
     
     //width one
+    //因为都是右手坐标系内 求得的法向量 相当于把每个三角形的法向量点 移到原点 然后法向量也是原点出发的 所以只需要判断其z坐标乘积是否小于0即可
     if( N042.z * N021.z < 0.00 )
     {
         GenerateLine2(0,2);
