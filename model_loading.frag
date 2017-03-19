@@ -17,6 +17,10 @@ uniform mat4 view;
 uniform mat4 model;
 uniform mat4 lightSpaceMatrix;
 
+uniform vec3 lightPos;
+uniform vec3 lightColor;
+uniform vec3 objectColor;
+
 uniform sampler2D shadowMap;
 
 const vec2 iResolution = vec2(800 * 2, 600 * 2);
@@ -66,17 +70,27 @@ void main()
     float blurSizeH = 1.0 / 2000.0;
     float blurSizeV = 1.0 / 2000.0;
     vec4 sum = vec4(0.0);
-    for (int x = -5; x <= 5; x++)
-        for (int y = -5; y <= 5; y++)
-            sum += texture(
-                           oneMap,
-                           vec2(projCoords.x + x * blurSizeH, projCoords.y + y * blurSizeV)
-                           ) /121.0;
     
-    color = sum;
+//    for (int x = -9; x <= 9; x++)
+//        for (int y = -9; y <= 9; y++)
+//            sum += texture(
+//                           oneMap,
+//                           vec2(projCoords.x + x * blurSizeH, projCoords.y + y * blurSizeV)
+//                           ) /361.0;
+//    
+//    color = sum;
     
     
-//        color = texture(oneMap, projCoords.xy);
+    
+    float diss = length((fs_in.position - lightPos));
+    // diss > 5 6 的时候有点效果 可以省去腿
+    if (diss > 6.)
+    {
+        color = texture(oneMap, projCoords.xy);
+    }else
+    {
+        discard;
+    }
     
 }
 
