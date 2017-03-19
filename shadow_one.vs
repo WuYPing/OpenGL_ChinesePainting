@@ -8,6 +8,7 @@ out VS_OUT {
     vec3 normal;
     vec3 FragPos;
     vec4 fragPosLightSpace;
+        vec4 newSpace;
 } vs_out;
 
 
@@ -33,8 +34,7 @@ void main()
     mat3 nomatrix =  mat3(transpose(inverse(model)));
     
     gl_Position = projection * view * model * vec4(position, 1.0f);
-    
-    
+
     vs_out.normal = vec3(projection * vec4(normalMatrix * normal, 1.0));
     
     vs_out.texCoords = texCoords;
@@ -42,6 +42,7 @@ void main()
     vs_out.FragPos = vec3(model * vec4(position, 1.0));
     
     vs_out.fragPosLightSpace = lightSpaceMatrix * vec4(vs_out.FragPos, 1.0);
+     vs_out.newSpace = projection * view  * vec4(vs_out.FragPos, 1.0);
     
     
    
