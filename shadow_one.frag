@@ -33,7 +33,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     // 取得当前片元在光源视角下的深度
     float currentDepth = projCoords.z;
     // 检查当前片元是否在阴影中
-    float bias = 0.003;
+    float bias = 0.005;
     float shadow = currentDepth - bias> closestDepth  ? 1.0 : 0.0;
     // 如果在阴影中返回1 否则返回0
     return shadow;
@@ -61,7 +61,6 @@ void main()
     vec3 diffuse = diff * lightColor;
     
     
-    
     vec3 result = (ambient * 0.1 + diffuse) * objectColor;
     
     
@@ -80,29 +79,14 @@ void main()
     
     vec3 re_color;
     
-    if( result_f > 0.0){
-        
-        re_color = vec3(255. / 255) / a1 + re_result / a2 ;
-        
-    }
-    else {
-        
-        re_color = vec3(29. / 255) / a1 + re_result / a2 ;
-        
-    }
-    
-    if( result_f > 0.9 ){
-        
-        re_color = vec3(255. / 255) / a1 + re_result / a2 ;
-        
-    }
-    else if ( result_f > 0.75 && result_f <= 0.9){
+  
+    if ( result_f > 0.75) {
         
         re_color = vec3(255. / 255) / a1 + re_result / a2 ;
         
     }
     else if ( result_f > 0.55 && result_f <= 0.75){
-        
+    
         re_color = vec3(200. / 255) / a1 + re_result / a2 ;
         
     }
@@ -127,7 +111,7 @@ void main()
         
     }
     
-    //    re_color = result * 1.5;
+//        re_color = result * 1.5;
     //    color = vec4(re_color * 0.8, 1.0f);
     
         float ddd = ShadowCalculation(fs_in.fragPosLightSpace);

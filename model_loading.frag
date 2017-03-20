@@ -43,6 +43,15 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 }
 
 
+float pack(vec3 c)
+{
+    float lum = (c.x + c.y + c.z) * (1. / 3.);
+    return lum;
+}
+
+
+
+
 void main()
 {
     
@@ -66,31 +75,68 @@ void main()
     //            color =   (0.5 + (Factor / 18.0));
     //     color =  vec4(1.,0.5,0.6,1.);
     
+    // Ambient
+    float ambientStrength = 0.3f;
+    vec3 ambient = ambientStrength * lightColor;
+    
+    // Diffuse
+    vec3 norm = normalize(fs_in.normal);
+    vec3 lightDir = normalize(lightPos - fs_in.FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * lightColor;
+    
+    
+    vec3 result = (ambient * 0.1 + diffuse) * objectColor;
+    
+    
+    vec3 re_result = result + vec3(120. / 255);
+    float result_f = pack(result);
+    
+    float k, kfang;
+    
+    if ( result_f > 0.75) {
+        k = 10;
+    }
+    else if ( result_f > 0.55 && result_f <= 0.75){
+        k = 7;
+    }
+    else if ( result_f > 0.5 && result_f <= 0.55){
+        k = 5;
+    }
+    else if ( result_f > 0.25 && result_f <= 0.5){
+        k = 3;
+    }
+    else if ( result_f > 0.04 && result_f <= 0.25){
+        k = 1;
+    } else {
+        k = 1;
+    }
+    
+    kfang = (k + k + 1) * (k + k + 1);
     
     float blurSizeH = 1.0 / 2000.0;
     float blurSizeV = 1.0 / 2000.0;
     vec4 sum = vec4(0.0);
     
-//    for (int x = -9; x <= 9; x++)
-//        for (int y = -9; y <= 9; y++)
-//            sum += texture(
-//                           oneMap,
-//                           vec2(projCoords.x + x * blurSizeH, projCoords.y + y * blurSizeV)
-//                           ) /361.0;
-//    
-//    color = sum;
+    for (float x = 0 - k; x <= k; x++)
+        for (float y = 0 - k; y <= k; y++)
+            sum += texture(
+                           oneMap,
+                           vec2(projCoords.x + x * blurSizeH, projCoords.y + y * blurSizeV)
+                           ) /kfang;
+    color = sum;
     
     
     
-    float diss = length((fs_in.position - lightPos));
-    // diss > 5 6 的时候有点效果 可以省去腿
-    if (diss > 6.)
-    {
-        color = texture(oneMap, projCoords.xy);
-    }else
-    {
-        discard;
-    }
+    //    float diss = length((fs_in.position - lightPos));
+    //    // diss > 5 6 的时候有点效果 可以省去腿
+    //    if (diss > 6.)
+    //    {
+    //        color = texture(oneMap, projCoords.xy);
+    //    }else
+    //    {
+    //        discard;
+    //    }
     
 }
 
