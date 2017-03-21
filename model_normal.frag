@@ -176,12 +176,12 @@ void main()
         //the original one
         //对于厚边两边的纹理 采取60%的概率舍弃？
         
-//        if ( ((abs(vec2(TexCoords.xy).y - 0.5) - 0.2) > 0) && rand(newUV) > 0.2 )
-//        {
-//            discard;
-//        } else {
+        if ( ((abs(vec2(TexCoords.xy).y - 0.5) - 0.2) > 0) && rand(newUV) > 0.2 )
+        {
+            discard;
+        } else {
             color = texture(ourTexture1, TexCoords);
-//        }
+        }
         
     }else{
         discard;

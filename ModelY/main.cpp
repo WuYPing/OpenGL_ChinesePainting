@@ -149,21 +149,21 @@ int main()
     
     //    Model ourModel("/Users/apple/Downloads/ConsoleApplication3/tails/Tails.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
+//        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/ANT.obj");
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL.obj");
     
     //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/CAMEL2.obj");
     
-    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/sparrow.obj");
+//    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/sparrow.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/spr.obj");
+        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/spr.obj");
     
     //    Model ourModel2("/Users/apple/Documents/maya/projects/default/scenes/stone.obj");
     
     Model ourModel3("/Users/apple/Documents/maya/projects/default/scenes/trrr.obj");
     
-    //    Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/caml.obj");
+//        Model ourModel("/Users/apple/Documents/maya/projects/default/scenes/caml.obj");
     
     Model ourModel2("/Users/apple/Documents/maya/projects/default/scenes/mont2.obj");
     
@@ -182,21 +182,21 @@ int main()
     
     
     // Set projection matrix
-//    projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 1.0f, 100.0f);
-//    oneShader.Use();
-//    glUniformMatrix4fv(glGetUniformLocation(oneShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-//    frameShader.Use();
-//    glUniformMatrix4fv(glGetUniformLocation(frameShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-//    shader.Use();
-//    glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-//    // Also one for normal shader
-//    normalShader.Use();
-//    glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-//    depthShader.Use();
-//    glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-//    montnormalShader.Use();
-//    glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-//    
+    projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 1.0f, 100.0f);
+    oneShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(oneShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    frameShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(frameShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    shader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    // Also one for normal shader
+    normalShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    depthShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    montnormalShader.Use();
+    glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.Program, "shadowMap"), 0);
     oneShader.Use();
@@ -535,7 +535,7 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(normalShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         glUniform1i(glGetUniformLocation(normalShader.Program, "ourTexture1"), 1);
         glUniform2fv(glGetUniformLocation(normalShader.Program, "tcOffset"),50, texCoordOffsets); // Pass in 25 vec2s in our texture coordinate offset array
-//        ourModel.Draw(normalShader);
+        ourModel.Draw(normalShader);
         
         
         

@@ -252,7 +252,7 @@ void main()
      
      */
     
-    color = texture( screenTexture, TexCoords);
+//    color = texture( screenTexture, TexCoords);
     
     
     
@@ -262,12 +262,12 @@ void main()
      
      */
     
-    //    vec4 noiseColor = uWaterPower * texture(noiseTexture, TexCoords);
-    //    vec2 newUV2 = vec2(TexCoords.x + noiseColor.x / texSize.x / 10, TexCoords.y + noiseColor.y / texSize.y / 10);
-    //    vec4 fColor = texture(screenTexture, newUV2);
-    //
-    //    color = quant(fColor, 255./pow(2., uQuantLevel));
-    //vec4 color = vec4(1., 1., .5, 1.);
+        vec4 noiseColor = uWaterPower * texture(noiseTexture, TexCoords);
+        vec2 newUV2 = vec2(TexCoords.x + noiseColor.x / texSize.x / 10, TexCoords.y + noiseColor.y / texSize.y / 10);
+        vec4 fColor = texture(screenTexture, newUV2);
+    
+        color = quant(fColor, 255./pow(2., uQuantLevel));
+//    vec4 color = vec4(1., 1., .5, 1.);
     
     
     

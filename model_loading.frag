@@ -95,19 +95,19 @@ void main()
     float k, kfang;
     
     if ( result_f > 0.75) {
-        k = 10;
+        k = 9;
     }
     else if ( result_f > 0.55 && result_f <= 0.75){
-        k = 7;
+        k = 9;
     }
     else if ( result_f > 0.5 && result_f <= 0.55){
-        k = 5;
+        k = 9;
     }
     else if ( result_f > 0.25 && result_f <= 0.5){
-        k = 3;
+        k = 7;
     }
     else if ( result_f > 0.04 && result_f <= 0.25){
-        k = 1;
+        k = 3;
     } else {
         k = 1;
     }
